@@ -1,10 +1,12 @@
 import peewee
-import db
-from Banckend.FastAPI.models.type_move import TypeMove
+import sys
+sys.path.append("..")
+from packges_module import db 
+from models.type_move import TypeMove
 from datetime import datetime
 
 class Stock(peewee.Model):
-  id          =  peewee.BigAutoField() 
+  id          =  peewee.AutoField() 
   type_id     =  peewee.ForeignKeyField(TypeMove, to_field="id")
   unid        =  peewee.IntegerField()
   state       =  peewee.BooleanField(default=True) 
@@ -14,3 +16,9 @@ class Stock(peewee.Model):
   class Meta:
     database  = db.database
     db_table  = "Stocks"
+
+if __name__ == "__main__":
+  if not TypeMove.table_exists():
+    TypeMove.create_table()
+if not Stock.table_exists():
+  Stock.create_table()

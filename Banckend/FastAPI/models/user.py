@@ -1,9 +1,11 @@
 import peewee
-import db
+import sys
+sys.path.append("..")
+from packges_module import db 
 from datetime import datetime
 
 class User(peewee.Model):
-  id          =  peewee.BigAutoField() 
+  id          =  peewee.AutoField()
   email       =  peewee.CharField() 
   password    =  peewee.CharField()
   state       =  peewee.BooleanField(default=True) 
@@ -13,3 +15,7 @@ class User(peewee.Model):
   class Meta:
     database  = db.database
     db_table  = "users"
+
+if __name__ == "__main__":
+  if not User.table_exists():
+    User.create_table()

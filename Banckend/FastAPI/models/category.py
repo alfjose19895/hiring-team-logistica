@@ -1,9 +1,11 @@
 import peewee
-import db
+import sys
+sys.path.append("..")
+from packges_module import db 
 from datetime import datetime
 
 class Category(peewee.Model):
-  id          =  peewee.BigAutoField() 
+  id          =  peewee.AutoField()
   description =  peewee.CharField() 
   state       =  peewee.BooleanField(default=True) 
   created_at  =  peewee.DateTimeField(default=datetime.now())  
@@ -12,3 +14,7 @@ class Category(peewee.Model):
   class Meta:
     database  = db.database
     db_table  = "categories"
+
+if __name__ == "__main__":
+  if not Category.table_exists():
+    Category.create_table()

@@ -1,9 +1,11 @@
 import peewee
-import db
+import sys
+sys.path.append("..")
+from packges_module import db 
 from datetime import datetime
 
 class TypeMove(peewee.Model):
-  id          =  peewee.BigAutoField() 
+  id          =  peewee.AutoField()
   type        =  peewee.CharField(max_length=2)
   description =  peewee.CharField()
   state       =  peewee.BooleanField(default=True) 
@@ -13,3 +15,7 @@ class TypeMove(peewee.Model):
   class Meta:
     database  = db.database
     db_table  = "type_moves"
+
+if __name__ == "__main__":
+  if not TypeMove.table_exists():
+    TypeMove.create_table()
