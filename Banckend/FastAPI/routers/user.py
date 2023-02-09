@@ -37,4 +37,3 @@ async def user(user: User):
     return user
   #print(datetime.utcnow() + timedelta(minutes=15))
   #print(datetime.now() + timedelta(minutes=15))
-
