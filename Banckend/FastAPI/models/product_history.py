@@ -4,7 +4,7 @@ import sys
 sys.path.append("..")
 from models.category import Category
 from models.product import Product
-from packges_module import db 
+from traits import db 
 
 class ProductHistory(peewee.Model):
   id          =  peewee.AutoField()

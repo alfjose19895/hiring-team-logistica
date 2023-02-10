@@ -2,7 +2,7 @@ import peewee
 import sys
 sys.path.append("..")
 from models.category import Category
-from packges_module import db 
+from traits import db 
 from datetime import datetime
 
 class Product(peewee.Model):
@@ -10,9 +10,10 @@ class Product(peewee.Model):
   code        =  peewee.CharField(unique=True, null=False )
   name        =  peewee.CharField()
   category_id =  peewee.ForeignKeyField(Category, to_field="id")
-  stock       =  peewee.BooleanField(default=True)
+  stock       =  peewee.BooleanField(default=False)
   created_at  =  peewee.DateTimeField(default=datetime.now())  
   updated_at  =  peewee.DateTimeField(default=datetime.now())
+  state       =  peewee.BooleanField(default=True)
 
   class Meta:
     database  = db.database

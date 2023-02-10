@@ -9,11 +9,11 @@ def isNone(val):
       return val
 def category_schema_function(category)->dict:
   return {
-      "id": category.id,
-      "description": category.description,
-      "state":  isNone(category.state),
-      "created_at":  category.created_at,
-      "updated_at":  category.updated_at
+    "id"          : category.id,
+    "description" : category.description,
+    "state"       : category.state,
+    "created_at"  : category.created_at,
+    "updated_at"  : category.updated_at
   }
 
 def categories_schema_function(categories)->list:
@@ -22,7 +22,12 @@ def categories_schema_function(categories)->list:
 class Category(BaseModel):
   id: int | None
   description: str
-  state: bool | None
+  state: bool
+
+class CategoryUpdte(BaseModel):
+  id: int
+  description: str
+  state: bool
 
 class CategoryFull(Category):
   created_at: datetime

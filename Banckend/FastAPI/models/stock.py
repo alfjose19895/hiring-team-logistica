@@ -1,7 +1,7 @@
 import peewee
 import sys
 sys.path.append("..")
-from packges_module import db 
+from traits import db 
 from models.type_move import TypeMove
 from datetime import datetime
 
