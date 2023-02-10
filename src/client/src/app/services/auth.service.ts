@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LoginResponse } from '../pages/login/login.component';
+import { LoginResponse } from '../interfaces/loginResponse';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  API_URL = 'http://127.0.0.1:8000/api'
+  API_URL = 'http://127.0.0.1:8000/api';
 
   constructor(private httpClient: HttpClient) { }
 

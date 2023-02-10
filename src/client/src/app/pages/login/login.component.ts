@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoginResponse } from 'src/app/interfaces/loginResponse';
 import { AuthService } from 'src/app/services/auth.service';
-
-export interface LoginResponse {
-  token: string;
-  token_type: string;
-}
 
 @Component({
   selector: 'app-login',

@@ -1,9 +1,52 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Category } from '../interfaces/category';
+import { CategoryResponse } from '../interfaces/categoryResponse';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CategoriesService {
+  API_URL = 'http://127.0.0.1:8000/api';
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    }),
+  };
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) {}
+
+  getCategories(): Observable<Category[]> {
+    return this.httpClient.get<Category[]>(
+      `${this.API_URL}/categories`,
+      this.httpOptions
+    );
+  }
+
+  createCategory(name: string): Observable<CategoryResponse> {
+    return this.httpClient.post<CategoryResponse>(
+      `${this.API_URL}/categories`,
+      { name },
+      this.httpOptions
+    );
+  }
+
+  deleteCategory(id: number): Observable<CategoryResponse> {
+    return this.httpClient.delete<CategoryResponse>(
+      `${this.API_URL}/categories/${id}`,
+      this.httpOptions
+    );
+  }
+
+  updateteCategory(id: string, name: string): Observable<CategoryResponse> {
+    return this.httpClient.patch<CategoryResponse>(
+      `${this.API_URL}/categories/${id}`,
+      {
+        name,
+      },
+      this.httpOptions
+    );
+  }
 }
