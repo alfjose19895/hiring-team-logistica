@@ -15,7 +15,7 @@ import (
 var DB *gorm.DB
 
 type DefaultModel struct {
-	ID        uint       `gorm:"primary_key" json:"id"`
+	ID        uint       `gorm:"primaryKey;autoIncrement" json:"id"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `sql:"index" json:"deleted_at"`
@@ -31,6 +31,13 @@ func SetupDatabase() error {
 	if os.Getenv("ENABLE_GORM_LOGGER") == "true" {
 		config = gorm.Config{
 			Logger: logger.Default.LogMode(logger.Info),
+			NowFunc: func() time.Time {
+				// UTC must be Timezone in America/Guayaquil and formatted as 2006-01-02 15:04:05
+				//format := "2006-01-02 15:04:05"
+				utc, _ := time.LoadLocation("America/Guayaquil")
+
+				return time.Now().In(utc).Round(time.Second)
+			},
 		}
 	} else {
 		config = gorm.Config{
