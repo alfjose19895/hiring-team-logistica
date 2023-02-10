@@ -30,9 +30,8 @@ services:
         - DB_DATABASE=${DB_DATABASE}
         - DB_USERNAME=${DB_USERNAME}
         - DB_PASSWORD=${DB_PASSWORD}
-        - ENABLE_LOGGER=${ENABLE_LOGGER}
     volumes:
-        - ./backend/build:/apps
+        - ./backend:/app
     ports:
         - "5000"
     restart: always
