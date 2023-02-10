@@ -1,0 +1,42 @@
+<div class="register">
+  <mat-card>
+    <mat-card-content>
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="register()"
+        class="register-form"
+        novalidate
+      >
+        <mat-form-field class="register-form-item" appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+
+        <mat-form-field class="register-form-item" appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" />
+        </mat-form-field>
+        <mat-form-field class="register-form-item" appearance="fill">
+          <mat-label>Enter your password</mat-label>
+          <input
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            formControlName="password"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+        </mat-form-field>
+        <button class="register-form-item" mat-button color="primary">
+          Register
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,48 @@
+.sidenav-container {
+    height: 100%;
+  }
+  
+  .sidenav {
+    width: 300px;
+    overflow: hidden;
+  }
+  
+  .amucomt {
+    margin-left: 10px;
+    color: #343a40;
+    font-size: 1.5rem;
+  }
+  
+  a {
+    margin: 0 30% 0 0;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    background-color: rgb(245, 246, 247);
+  }
+  
+  a.active {
+    text-shadow: 1px 1px #f61cc4;
+    color: #343a40;
+    background-color: rgb(225, 226, 227);
+  }
+  
+  .toolbar {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .toolbar_title {
+    text-shadow: 1px 1px #343a40;
+  }
+  
+  .drawer_title {
+    color: #343a40;
+    font-size: 1.3rem;
+  }
+  
+  .shadow {
+    text-shadow: 1px 1px #343a40;
+  }
