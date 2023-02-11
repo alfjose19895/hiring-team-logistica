@@ -6,7 +6,7 @@ from datetime import datetime
 
 class Category(peewee.Model):
   id          =  peewee.AutoField()
-  description =  peewee.CharField() 
+  description =  peewee.CharField(unique=True) 
   state       =  peewee.BooleanField(default=True) 
   created_at  =  peewee.DateTimeField(default=datetime.now())  
   updated_at  =  peewee.DateTimeField(default=datetime.now())

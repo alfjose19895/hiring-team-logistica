@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 def isNone(val):
@@ -22,7 +22,13 @@ def categories_schema_function(categories)->list:
 class Category(BaseModel):
   id: int | None
   description: str
-  state: bool
+  state: bool| None
+  
+  class Config:
+    validate_assignment = True
+  @validator('state')
+  def set_state(cls, state):
+    return state==None or state
 
 class CategoryUpdte(BaseModel):
   id: int
