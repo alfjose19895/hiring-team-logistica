@@ -40,7 +40,7 @@ export class CategoriesService {
     );
   }
 
-  updateteCategory(id: string, name: string): Observable<CategoryResponse> {
+  updateCategory(id: string, name: string): Observable<CategoryResponse> {
     return this.httpClient.patch<CategoryResponse>(
       `${this.API_URL}/categories/${id}`,
       {

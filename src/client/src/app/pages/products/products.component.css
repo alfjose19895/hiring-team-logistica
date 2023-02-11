@@ -1,3 +1,50 @@
-#products {
-    margin: 1rem;
+.products-page {
+  display: flex;
+  background-color: red;
+  padding: 1rem;
+}
+
+.products-page section {
+  margin-inline: 1rem;
+  padding: 1rem;
+  background-color: blue;
+}
+
+.products-form {
+  width: 40%;
+}
+
+.products {
+  width: 60%;
+}
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.category-form-item {
+  margin: 0 1rem;
+}
+
+table {
+  width: 100%;
+}
+
+table th {
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+}
+
+.actions button {
+  margin-inline: 0.25rem;
+}
+
+.search {
+  width: 100%;
 }

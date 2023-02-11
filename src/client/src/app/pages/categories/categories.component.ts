@@ -29,8 +29,8 @@ export class CategoriesComponent implements OnInit {
     this.categoriesService
       .getCategories()
       .subscribe((categories: Category[]) => {
-        this.categories = categories;
-        this.filteredCategories = this.categories;
+        this.filteredCategories = categories;
+        this.categories = this.filteredCategories;
       });
   }
 
@@ -76,7 +76,7 @@ export class CategoriesComponent implements OnInit {
   updateCategory() {
     if (this.categoryForm.valid) {
       this.categoriesService
-        .updateteCategory(
+        .updateCategory(
           this.categoryForm.get('id')?.value,
           this.categoryForm.get('name')?.value
         )
