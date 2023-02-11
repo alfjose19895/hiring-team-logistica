@@ -40,7 +40,8 @@ export class CategoriesComponent implements OnInit {
         .createCategory(this.categoryForm.get('name')?.value)
         .subscribe((categoryResponse: CategoryResponse) => {
           let { message, data } = categoryResponse;
-          this.categories.push(data);
+          this.filteredCategories.push(data);
+          this.categories = this.filteredCategories;
           this.categoryForm.reset();
           alert(message);
         });
@@ -51,9 +52,10 @@ export class CategoriesComponent implements OnInit {
     this.categoriesService
       .deleteCategory(id)
       .subscribe((categoryResponse: CategoryResponse) => {
-        this.categories = this.categories.filter(
+        this.filteredCategories = this.categories.filter(
           (category: Category) => category.id != id
         );
+        this.categories = this.filteredCategories;
         let { message } = categoryResponse;
         alert(message);
       });
@@ -79,13 +81,15 @@ export class CategoriesComponent implements OnInit {
           this.categoryForm.get('name')?.value
         )
         .subscribe((categoryResponse: CategoryResponse) => {
-          this.categories = this.categories.filter(
+          this.filteredCategories = this.categories.filter(
             (category: Category) =>
               category.id != this.categoryForm.get('id')?.value
           );
           let { message, data } = categoryResponse;
-          this.categories.push(data);
+          this.filteredCategories.push(data);
+          this.categories = this.filteredCategories;
           this.categoryForm.reset();
+          this.submitButtonText = 'Create';
           alert(message);
         });
     }
