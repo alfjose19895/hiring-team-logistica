@@ -10,11 +10,11 @@ func MockLoginUser() error {
 	db := database.DB
 	var user Account
 
-	// Since we will mock the main user, we don't need parsing anything
+	// Since we will mock the main user, we don't need parsing anything :)
 	user = Account{
 		Username: "admin",
 		Email:    "admin@domain.com",
-		Password: "123456789",
+		Password: "admin",
 	}
 
 	var existingUser Account
