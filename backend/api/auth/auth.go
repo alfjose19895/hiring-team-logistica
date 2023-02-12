@@ -6,57 +6,27 @@ import (
 	"errors"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
-	"net/mail"
+	"time"
 )
 
 type LoginRequest struct {
-	Identity string `json:"identity"`
+	Identity string `json:"credential"`
 	Password string `json:"password"`
 }
 
 type LoginResponse struct {
-	ID       uint   `json:"id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	ID        uint      `json:"id"`
+	Username  string    `json:"username"`
+	Email     string    `json:"email"`
+	Password  string    `json:"password"`
+	LastLogin time.Time `json:"last_login"`
 }
 
-// This function get the user by email and return the Account struct
-func getUserByEmail(email string) (*Account, error) {
-	db := database.DB
-	var user Account
-	if err := db.Where(&Account{Email: email}).Find(&user).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, pkg.EntityNotFound("Could not find valid identity")
-		}
-		return nil, pkg.UnexpectedError(err.Error())
-	}
-	return &user, nil
-}
-
-// This function get the email by username and return the Account struct
-func getEmailByUser(username string) (*Account, error) {
-	db := database.DB
-	var user Account
-	if err := db.Where(&Account{Username: username}).Find(&user).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, pkg.EntityNotFound("Could not find valid identity")
-		}
-		return nil, pkg.UnexpectedError(err.Error())
-	}
-	return &user, nil
-}
-
-// This function check if the email is valid based on the RFC 5322
-func valid(email string) bool {
-	_, err := mail.ParseAddress(email)
-	return err == nil
-}
-
-// Login to the system
 func Login(ctx *fiber.Ctx) error {
+	db := database.DB
 	input := new(LoginRequest)
-	var userData LoginResponse
+	// generate time for last login
+	lastLogin, _ := time.Parse("02/01/2006 15:04:05", time.Now().Format("02/01/2006 15:04:05"))
 
 	if err := ctx.BodyParser(&input); err != nil {
 		return pkg.BadRequest("Error while parsing body:" + err.Error())
@@ -65,37 +35,39 @@ func Login(ctx *fiber.Ctx) error {
 	identity := input.Identity
 	password := input.Password
 
-	user, email, err := new(Account), new(Account), *new(error)
-
-	if valid(identity) {
-		email, err = getUserByEmail(identity)
-	} else {
-		user, err = getEmailByUser(identity)
+	var user Account
+	if err := db.Where("username = ?", identity).Or("email = ?", identity).Find(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return pkg.EntityNotFound("Could not find valid identity")
+		}
+		return pkg.UnexpectedError(err.Error())
 	}
 
-	if err != nil {
-		return pkg.BadRequest("Could not find valid identity:" + err.Error())
-	}
-
-	if email == nil && user == nil {
-		return pkg.BadRequest("Could not find valid identity")
-	}
-
-	if email != nil {
-		userData.ID = email.ID
-		userData.Username = email.Username
-		userData.Email = email.Email
-		userData.Password = email.Password
-	} else {
-		userData.ID = user.ID
-		userData.Username = user.Username
-		userData.Email = user.Email
-		userData.Password = user.Password
-	}
-
-	if !pkg.PasswordMatch(userData.Password, password) {
+	if !pkg.PasswordMatch(password, user.Password) {
 		return pkg.Unauthorized("Invalid password")
 	}
 
-	return ctx.JSON(userData)
+	preLastLogin := user.LastLogin
+
+	// Update the last login field
+	db.Model(&user).Update("last_login", lastLogin)
+
+	user.LastLogin = preLastLogin // we will return the prev last login to make more sense :)
+
+	return ctx.Status(fiber.StatusOK).JSON(user)
+
+}
+
+func GetAccount(ctx *fiber.Ctx) error {
+	var user Account
+	db := database.DB
+	id := ctx.Params("id")
+
+	if err := db.Where("id = ?", id).Find(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return pkg.EntityNotFound("Could not find valid identity")
+		}
+		return pkg.UnexpectedError(err.Error())
+	}
+	return ctx.Status(fiber.StatusOK).JSON(user)
 }
