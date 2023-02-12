@@ -14,7 +14,10 @@ import (
 
 // We will set up the middlewares to use in our server before mount the application routes or any other thing
 func setupMiddlewares(app *fiber.App) {
-	app.Use(cors.New())
+	app.Use(cors.New(
+		cors.Config{
+			AllowOrigins: "localhost:3000,localhost:8080",
+		}))
 	if os.Getenv("ENABLE_LOGGER") == "true" {
 		app.Use(logger.New(logger.Config{
 			Format:     "${cyan}[${time}] ${white}[PID: ${pid}] STATUS ${red}${status} ${white}[METHOD ${cyan}${method}${white}] ${path}\n",
