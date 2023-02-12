@@ -13,8 +13,8 @@ def product_schema_function(product)->dict:
     "state"       : product.state
   }
 
-def categories_schema_function(categories)->list:
-  return [product_schema_function(product) for product in categories]
+def products_schema_function(products)->list:
+  return [product_schema_function(product) for product in products]
 
 class Product(BaseModel):
   id:         int|None
@@ -46,3 +46,9 @@ class ProductUpdte(BaseModel):
 class ProductFull(Product):
   created_at: datetime
   updated_at: datetime
+
+class ProductSearch(BaseModel):
+  code:       str|None
+  name:       str|None
+  category_id:int|None
+  stock:      bool|None

@@ -1,4 +1,7 @@
 from datetime import datetime
+from functools import reduce
+from importlib.resources import Resource
+import operator
 import schemas.product as product_schema
 import schemas.product_history as product_history_schema
 from models.product import Product as ProductModel
@@ -24,6 +27,27 @@ def search_product_db(key: str, value)->product_schema.ProductFull:
     product = None
   return product
 
+def search_product_for_filter(filter: product_schema.ProductSearch, is_and:bool=True):
+  try:
+    filter= dict(filter)
+    print(filter)
+    print(filter.items())
+    expression_list = [attrgetter(field)(ProductModel) == value
+                       for field, value in filter.items() if value!=None]
+    if len(expression_list)>0:
+      if is_and:
+        anded_expr = reduce(operator.and_, expression_list)
+        product= ProductModel.select().where(anded_expr)
+      else:
+        ored_expr = reduce(operator.or_, expression_list)
+        product= ProductModel.select().where(ored_expr)
+      product=product_schema.products_schema_function(product)
+      return product
+    else:
+      return None
+  except Exception as e: # work on python 3.x
+    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
 #? Metodo encargado crear registros en la tabla product
 def create(product: product_schema.Product):
   try:
@@ -34,10 +58,11 @@ def create(product: product_schema.Product):
       del product_dict["stock"]
       product = ProductModel.create(**product_dict)
     else:
+      product=None
       raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="El producto ya existe")
+    return product
   except peewee.IntegrityError:
     raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="La Categoria a Ingresar no existe")
-  return product
 
 #? Metodo encargado actualizar registros en la tabla product y agregar registro en la tabal product_history
 def update(product: product_schema.ProductUpdte):

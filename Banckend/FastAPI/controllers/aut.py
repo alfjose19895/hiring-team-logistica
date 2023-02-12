@@ -6,6 +6,7 @@ from schemas.user import user_schema
 
 def search_user_db(useremail: str):
   try:
+    print(useremail)
     user = User.get(User.email==useremail)
     user = User(**user_schema(user))
   except peewee.DoesNotExist:
