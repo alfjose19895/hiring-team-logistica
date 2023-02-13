@@ -11,7 +11,7 @@ import { ProductsService } from 'src/app/services/products.service';
 })
 export class ProductsTableComponent implements OnInit {
   query: string = '';
-  displayedColumns: string[] = ['code', 'name', 'has_stock', 'category'];
+  displayedColumns: string[] = ['code', 'name', 'has_stock'];
   dataSource = new MatTableDataSource<Product>();
   backupDataSource = new MatTableDataSource<Product>();
   @Output() selectedProduct = new EventEmitter<Product>();
@@ -23,8 +23,8 @@ export class ProductsTableComponent implements OnInit {
     this.getProducts();
     this.productsService.refresh$.subscribe(() => this.getProducts());
     this.isStock
-      ? this.displayedColumns.push(...['quantity', 'price', 'size', 'weight'])
-      : this.displayedColumns.push('actions');
+      ? this.displayedColumns.push(...['quantity', 'price', 'size', 'weight', 'category'])
+      : this.displayedColumns.push(...['category', 'actions']);
   }
 
   getProducts() {
