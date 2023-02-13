@@ -1,27 +1,20 @@
 .products-page {
-  display: flex;
-  background-color: red;
   padding: 1rem;
 }
 
 .products-page section {
-  margin-inline: 1rem;
+  margin-bottom: 1rem;
   padding: 1rem;
-  background-color: blue;
 }
 
-.products-form {
-  width: 40%;
+.product-form-inputs {
+  display: flex;
 }
 
-.products {
-  width: 60%;
-}
-
-.product-form {
+.product-form-inputs section {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  width: 100%;
 }
 
 .category-form-item {
@@ -32,7 +25,7 @@ table {
   width: 100%;
 }
 
-table th {
+table th, td {
   text-align: center;
 }
 

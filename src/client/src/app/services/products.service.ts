@@ -2,7 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from '../interfaces/product';
+import { ProductMeasurement } from '../interfaces/productMeasurement';
 import { ProductResponse } from '../interfaces/productResponse';
+import { Stock } from '../interfaces/stock';
 
 @Injectable({
   providedIn: 'root',
@@ -25,15 +27,14 @@ export class ProductsService {
     );
   }
 
-  createProduct(product: Product): Observable<ProductResponse> {
+  createProduct(
+    product: Product,
+    productMeasurement: ProductMeasurement,
+    stock: Stock
+  ): Observable<ProductResponse> {
     return this.httpClient.post<ProductResponse>(
       `${this.API_URL}/products`,
-      {
-        name: product.name,
-        code: product.code,
-        has_stock: product.has_stock,
-        category_id: product.category_id,
-      },
+      { ...product, productMeasurement, stock },
       this.httpOptions
     );
   }
@@ -45,15 +46,14 @@ export class ProductsService {
     );
   }
 
-  updateProduct(product: Product): Observable<ProductResponse> {
+  updateProduct(
+    product: Product,
+    productMeasurement: ProductMeasurement,
+    stock: Stock
+  ): Observable<ProductResponse> {
     return this.httpClient.patch<ProductResponse>(
       `${this.API_URL}/products/${product.id}`,
-      {
-        name: product.name,
-        code: product.code,
-        has_stock: product.has_stock,
-        category_id: product.category_id,
-      },
+      { ...product, productMeasurement, stock },
       this.httpOptions
     );
   }

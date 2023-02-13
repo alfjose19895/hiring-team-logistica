@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('product_measurements', function (Blueprint $table) {
             $table->id();
             $table->integer('price');
-            $table->integer('size');
+            $table->string('size');
             $table->integer('weight');
             $table->timestamps();
         });

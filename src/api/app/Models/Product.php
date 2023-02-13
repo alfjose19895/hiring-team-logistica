@@ -14,10 +14,10 @@ class Product extends Model
     }
 
     public function stock() {
-        return $this->hasMany(Stock::class);
+        return $this->hasOne(Stock::class);
     }
 
     public function productMeasurement() {
-        return $this->hasMany(productMeasurement::class);
+        return $this->hasOne(productMeasurement::class);
     }
 }

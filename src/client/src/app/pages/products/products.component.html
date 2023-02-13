@@ -8,29 +8,53 @@
           class="product-form"
           novalidate
         >
-          <mat-form-field class="product-form-item" appearance="fill">
-            <mat-label>Name</mat-label>
-            <input matInput formControlName="name" />
-          </mat-form-field>
-          <mat-form-field class="product-form-item" appearance="fill">
-            <mat-label>Code</mat-label>
-            <input matInput formControlName="code" />
-          </mat-form-field>
-          <mat-form-field class="product-form-item" appearance="fill">
-            <mat-label>Category</mat-label>
-            <mat-select formControlName="category_id">
-              <mat-option
-                *ngFor="let category of categories"
-                [value]="category.id"
+          <div class="product-form-inputs">
+            <section>
+              <mat-form-field class="product-form-item" appearance="fill">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" />
+              </mat-form-field>
+              <mat-form-field class="product-form-item" appearance="fill">
+                <mat-label>Code</mat-label>
+                <input matInput formControlName="code" />
+              </mat-form-field>
+              <mat-form-field class="product-form-item" appearance="fill">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="category_id">
+                  <mat-option
+                    *ngFor="let category of categories"
+                    [value]="category.id"
+                  >
+                    {{ category.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-checkbox
+                class="product-form-item"
+                formControlName="has_stock"
+                >Has Stock</mat-checkbox
               >
-                {{ category.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-checkbox class="product-form-item" formControlName="has_stock"
-            >Has Stock</mat-checkbox
-          >
-          <button class="product-form-item" mat-button color="primary">
+            </section>
+            <section>
+              <mat-form-field class="product-form-item" appearance="fill">
+                <mat-label>Quantity</mat-label>
+                <input matInput formControlName="quantity" type="number"/>
+              </mat-form-field>
+              <mat-form-field class="product-form-item" appearance="fill">
+                <mat-label>Price</mat-label>
+                <input matInput formControlName="price" type="number"/>
+              </mat-form-field>
+              <mat-form-field class="product-form-item" appearance="fill">
+                <mat-label>Size</mat-label>
+                <input matInput formControlName="size" />
+              </mat-form-field>
+              <mat-form-field class="product-form-item" appearance="fill">
+                <mat-label>Weight</mat-label>
+                <input matInput formControlName="weight" type="number"/>
+              </mat-form-field>
+            </section>
+          </div>
+          <button class="product-form-item" style="width: 100%;" mat-button color="primary">
             {{ submitButtonText }}
           </button>
         </form>

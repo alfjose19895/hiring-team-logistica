@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductMeasurement;
+use App\Models\Stock;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -26,12 +28,27 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $request = $request->all();
+
         $product = new Product;
-        $product->name = $request->name;
-        $product->code = $request->code;
-        $product->has_stock = $request->has_stock;
-        $product->category_id = $request->category_id;
+        $product->name = $request['name'];
+        $product->code = $request['code'];
+        $product->has_stock = $request['has_stock'];
+        $product->category_id = $request['category_id'];
         $product->save();
+
+        $productMeasurement = new ProductMeasurement;
+        $productMeasurement->price = $request['productMeasurement']['price'];
+        $productMeasurement->size = $request['productMeasurement']['size'];
+        $productMeasurement->weight = $request['productMeasurement']['weight'];
+        $productMeasurement->product_id = $product->id;
+        $productMeasurement->save();
+
+        $stock = new Stock;
+        $stock->quantity = $request['stock']['quantity'];
+        $stock->product_id = $product->id;
+        $stock->save();
+
         return response()->json([
             "message" => "Product Added",
             "data" => $product
@@ -58,11 +75,26 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $product->name = $request->name;
-        $product->code = $request->code;
-        $product->has_stock = $request->has_stock;
-        $product->category_id = $request->category_id;
+        $request = $request->all();
+
+        $product->name = $request['name'];
+        $product->code = $request['code'];
+        $product->has_stock = $request['has_stock'];
+        $product->category_id = $request['category_id'];
         $product->save();
+
+        $productMeasurement = ProductMeasurement::find($request['productMeasurement']['id']);
+        $productMeasurement->price = $request['productMeasurement']['price'];
+        $productMeasurement->size = $request['productMeasurement']['size'];
+        $productMeasurement->weight = $request['productMeasurement']['weight'];
+        $productMeasurement->product_id = $request['id'];
+        $productMeasurement->save();
+
+        $stock = Stock::find($request['stock']['id']);
+        $stock->quantity = $request['stock']['quantity'];
+        $stock->product_id = $request['id'];
+        $stock->save();
+
         return response()->json([
             "message" => "Product Updated",
             "data" => $product
