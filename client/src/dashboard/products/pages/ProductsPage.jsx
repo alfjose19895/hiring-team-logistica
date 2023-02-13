@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
+import { Table } from '../../components/table';
 import { useProductStore } from '../../hooks';
 
 const ProductsPage = () => {
   const { startLoadingProducts, products } = useProductStore();
-
-  console.log(products.products);
 
   useEffect(() => {
     startLoadingProducts();
@@ -14,13 +13,9 @@ const ProductsPage = () => {
     <>
       <h1 className="text-4xl font-black">Products</h1>
 
-      <ul>
-        {products?.products?.map(p => (
-          <li key={p.id}>{p.title}</li>
-        ))}
-      </ul>
-
-      <div className="bg-white shadow mt-10 rounded-lg">Some title</div>
+      <div className="mt-16 p-9">
+        {products?.products?.length > 0 && <Table data={products.products} />}
+      </div>
     </>
   );
 };
