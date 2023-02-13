@@ -3,10 +3,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { Category } from '../../categories/entities/category.entity';
+import { ProductMeasurement } from './product-measurement.entity';
 
 @Entity('products')
 export class Product {
@@ -23,6 +25,11 @@ export class Product {
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
-  // measurement
+  @OneToMany(
+    () => ProductMeasurement,
+    (productMeasurement) => productMeasurement.product,
+  )
+  productMeasurements: ProductMeasurement[];
+
   // changeHistory
 }
