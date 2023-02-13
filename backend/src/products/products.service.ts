@@ -9,6 +9,7 @@ import { DataSource, Repository } from 'typeorm';
 
 import { CategoriesService } from '../categories/categories.service';
 import { PaginationDto } from '../common/dto';
+import { User } from '../users/entities/user.entity';
 import { CreateProductDto, PaginatedProducts, UpdateProductDto } from './dto';
 import { ProductChangeHistory } from './entities/product-change-history.entity';
 import { ProductMeasurement } from './entities/product-measurement.entity';
@@ -37,7 +38,10 @@ export class ProductsService {
   ) {}
 
   // TODO: user relation
-  async create(createProductDto: CreateProductDto): Promise<Product> {
+  async create(
+    createProductDto: CreateProductDto,
+    user: User,
+  ): Promise<Product> {
     const { category_id, unit, quantity } = createProductDto;
 
     const category = await this.categoriesService.findOne(category_id);
@@ -46,6 +50,7 @@ export class ProductsService {
       const product = this.productRepository.create({
         ...createProductDto,
         category,
+        user,
       });
       await this.productRepository.save(product);
 
@@ -76,24 +81,31 @@ export class ProductsService {
     }
   }
 
-  async findAll(paginationDto: PaginationDto): Promise<PaginatedProducts> {
+  async findAll(
+    paginationDto: PaginationDto,
+    userId: number,
+  ): Promise<PaginatedProducts> {
     const { limit, offset } = paginationDto;
 
     const [products, count] = await Promise.all([
       this.productRepository.find({
         take: limit,
         skip: offset,
+        where: { user: { id: userId } },
       }),
-      this.productRepository.count({}),
+      this.productRepository.count({ where: { user: { id: userId } } }),
     ]);
 
     return { count, products };
   }
 
-  async findOne(term: string): Promise<Product> {
+  async findOne(term: string, userId: number): Promise<Product> {
     let product: Product;
     if (isFinite(+term))
-      product = await this.productRepository.findOneBy({ id: +term });
+      product = await this.productRepository.findOneBy({
+        id: +term,
+        user: { id: userId },
+      });
     else {
       const queryBuilder = this.productRepository.createQueryBuilder('product');
 
@@ -114,7 +126,7 @@ export class ProductsService {
     return product;
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
+  async update(id: number, updateProductDto: UpdateProductDto, userId: number) {
     const {
       measurementUnitId,
       quantityId,
@@ -123,7 +135,7 @@ export class ProductsService {
       unit,
       ...rest
     } = updateProductDto;
-    const product = await this.findOne(id.toString());
+    const product = await this.findOne(id.toString(), userId);
     let updatedProduct = await this.productRepository.preload({
       id,
       ...rest,

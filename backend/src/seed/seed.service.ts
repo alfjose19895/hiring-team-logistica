@@ -37,7 +37,7 @@ export class SeedService {
 
     const [user] = await this.insertUsers();
     await this.insertCategories();
-    await this.insertProucts();
+    await this.insertProucts(user);
   }
 
   private async deleteData() {
@@ -101,11 +101,11 @@ export class SeedService {
     return await this.categoryRepository.save(categories);
   }
 
-  private async insertProucts() {
+  private async insertProucts(user: User) {
     const insertPromises = [];
 
     SEED_PRODUCTS.forEach((product) =>
-      insertPromises.push(this.productsService.create(product)),
+      insertPromises.push(this.productsService.create(product, user)),
     );
 
     await Promise.all(insertPromises);

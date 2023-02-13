@@ -4,10 +4,10 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 
-import { UpdateUserDto } from '../../users/dto/update-user.dto';
+import { GetAuthUserDto } from '../../users/dto/get-auth-user.dto';
 
 export const GetUser = createParamDecorator(
-  (data: keyof UpdateUserDto, ctx: ExecutionContext) => {
+  (data: keyof GetAuthUserDto, ctx: ExecutionContext) => {
     const req = ctx.switchToHttp().getRequest();
     const user = req.user;
     if (!user) throw new InternalServerErrorException('User not found');

@@ -13,6 +13,7 @@ import { createUniqueId } from '../../common/utils';
 import { ProductChangeHistory } from './product-change-history.entity';
 import { ProductMeasurement } from './product-measurement.entity';
 import { StockInquiry } from './stock-inquiries.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity('products')
 export class Product {
@@ -32,6 +33,10 @@ export class Product {
   price: number;
 
   // relations
+  @ManyToOne(() => User, (user) => user.products, { eager: true })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
   @ManyToOne(() => Category, (category) => category.products, { eager: true })
   @JoinColumn({ name: 'category_id' })
   category: Category;
