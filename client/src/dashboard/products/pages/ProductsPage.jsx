@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Table } from '../../components/table';
 import { useProductStore } from '../../hooks';
 import { ProductForm } from '../components';
-import { CustomModal } from './../../components/modal';
+import { CustomModal } from '../../../ui/components/modal';
 
 const ProductsPage = () => {
   const { startLoadingProducts, products, startLoadingCategories } =

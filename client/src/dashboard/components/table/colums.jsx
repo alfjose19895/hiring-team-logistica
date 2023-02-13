@@ -1,25 +1,11 @@
-import { Delete, Edit } from '@mui/icons-material';
-import { Box, IconButton, Tooltip } from '@mui/material';
+import CrudButtons from './CrudButtons';
 
 export const columnsStructure = [
   {
     accessorKey: 'null',
     header: 'Actions',
     enableSorting: false,
-    Cell: ({ row }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
-        <Tooltip arrow placement="left" title="Edit">
-          <IconButton onClick={() => console.log(row.original)}>
-            <Edit />
-          </IconButton>
-        </Tooltip>
-        <Tooltip arrow placement="right" title="Delete">
-          <IconButton color="error" onClick={() => console.log(row.original)}>
-            <Delete />
-          </IconButton>
-        </Tooltip>
-      </Box>
-    ),
+    Cell: ({ row }) => <CrudButtons row={row} />,
   },
   {
     accessorKey: 'title',

@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import * as React from 'react';
+import { useUiStore } from '../../../hooks/useUiStore';
 
 const style = {
   position: 'absolute',
@@ -15,14 +15,11 @@ const style = {
 };
 
 const CustomModal = ({ children }) => {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { isModalOpen, closeModal } = useUiStore();
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={isModalOpen} onClose={() => closeModal()}>
         <Box sx={style}>{children}</Box>
       </Modal>
     </div>
