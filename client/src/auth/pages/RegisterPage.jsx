@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 
 const RegisterPage = () => {
   return (
-    <section className="mt-9">
-      <div className="relative z-0 flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
+    <section className="mt-12">
+      <div className="relative z-0 flex flex-col min-w-0 break-words border-0 my-10 bg-white shadow rounded-xl p-10">
         <div className="p-6 mb-0 text-center bg-white border-b-0 rounded-t-2xl">
           <h5>Register with</h5>
         </div>
@@ -111,7 +111,7 @@ const RegisterPage = () => {
 
             <div className="text-center">
               <button
-                type="button"
+                type="submit"
                 className="inline-block w-full px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white"
               >
                 Sign up
