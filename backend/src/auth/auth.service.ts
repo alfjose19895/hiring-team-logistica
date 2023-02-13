@@ -1,17 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 import { UsersService } from '../users/users.service';
-import { AuthResponse, SignupDto } from './dto';
+import { AuthResponse, LoginDto, SignupDto } from './dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async signUp(signupDto: SignupDto): Promise<AuthResponse> {
     const user = await this.usersService.create(signupDto);
 
-    //
+    const token = this.getJwt(user.id);
 
-    return { jwt: '', user };
+    return { jwt: token, user };
+  }
+
+  async login({ email, password }: LoginDto): Promise<AuthResponse> {
+    const user = await this.usersService.findOneByEmail(email);
+    if (!bcrypt.compareSync(password, user.password))
+      throw new UnauthorizedException(
+        'There was a problem logging in. Check your email and password or create an account',
+      );
+    delete user.password;
+
+    const token = this.getJwt(user.id);
+
+    return { jwt: token, user };
+  }
+
+  private getJwt(id: number) {
+    const token = this.jwtService.sign({ id });
+    return token;
   }
 }
