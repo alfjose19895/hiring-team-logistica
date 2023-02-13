@@ -32,22 +32,26 @@ export class Product {
   price: number;
 
   // relations
-  @ManyToOne(() => Category, (category) => category.products)
+  @ManyToOne(() => Category, (category) => category.products, { eager: true })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
   @OneToMany(
     () => ProductMeasurement,
     (productMeasurement) => productMeasurement.product,
+    { eager: true },
   )
   productMeasurements: ProductMeasurement[];
 
-  @OneToMany(() => StockInquiry, (stockInquiry) => stockInquiry.product)
+  @OneToMany(() => StockInquiry, (stockInquiry) => stockInquiry.product, {
+    eager: true,
+  })
   stockInquiries: StockInquiry[];
 
   @OneToMany(
     () => ProductChangeHistory,
     (changeHistory) => changeHistory.product,
+    { eager: true },
   )
   changeHistory: ProductChangeHistory[];
 

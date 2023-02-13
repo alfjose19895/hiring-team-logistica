@@ -69,12 +69,6 @@ export class ProductsService {
       this.productRepository.find({
         take: limit,
         skip: offset,
-
-        // relations: {
-        //   category: true,
-        //   productMeasurements: true,
-        //   stockInquiries: true,
-        // },
       }),
       this.productRepository.count({}),
     ]);
@@ -82,8 +76,28 @@ export class ProductsService {
     return { count, products };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(term: string): Promise<Product> {
+    let product: Product;
+    if (isFinite(+term))
+      product = await this.productRepository.findOneBy({ id: +term });
+    else {
+      const queryBuilder = this.productRepository.createQueryBuilder('product');
+
+      product = await queryBuilder
+        .where('UPPER(title) =:title or code =:code', {
+          title: term.toUpperCase(),
+          code: term.toLowerCase(),
+        })
+        .leftJoinAndSelect('product.category', 'category')
+        .leftJoinAndSelect('product.productMeasurements', 'productMeasurements')
+        .leftJoinAndSelect('product.stockInquiries', 'stockInquiries')
+        .getOne();
+    }
+
+    if (!product)
+      throw new NotFoundException(`Product with '${term}' not found`);
+
+    return product;
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
