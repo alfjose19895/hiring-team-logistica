@@ -14,7 +14,9 @@ export class ProductChangeHistory {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Product, (product) => product.changeHistory)
+  @ManyToOne(() => Product, (product) => product.changeHistory, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'product_id' })
   product: Product;
 

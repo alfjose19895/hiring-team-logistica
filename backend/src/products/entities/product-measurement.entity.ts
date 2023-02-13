@@ -16,7 +16,9 @@ export class ProductMeasurement {
   @Column()
   unit: string;
 
-  @ManyToOne(() => Product, (product) => product.productMeasurements)
+  @ManyToOne(() => Product, (product) => product.productMeasurements, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'product_id' })
   product: Product;
 }

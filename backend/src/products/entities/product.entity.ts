@@ -44,19 +44,20 @@ export class Product {
   @OneToMany(
     () => ProductMeasurement,
     (productMeasurement) => productMeasurement.product,
-    { eager: true },
+    { eager: true, cascade: true },
   )
   productMeasurements: ProductMeasurement[];
 
   @OneToMany(() => StockInquiry, (stockInquiry) => stockInquiry.product, {
     eager: true,
+    cascade: true,
   })
   stockInquiries: StockInquiry[];
 
   @OneToMany(
     () => ProductChangeHistory,
     (changeHistory) => changeHistory.product,
-    { eager: true },
+    { eager: true, cascade: true },
   )
   changeHistory: ProductChangeHistory[];
 

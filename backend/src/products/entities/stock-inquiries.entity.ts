@@ -16,7 +16,9 @@ export class StockInquiry {
   @Column()
   quantity: number;
 
-  @ManyToOne(() => Product, (product) => product.stockInquiries)
+  @ManyToOne(() => Product, (product) => product.stockInquiries, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'product_id' })
   product: Product;
 }

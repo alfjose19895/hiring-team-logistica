@@ -49,7 +49,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+  remove(@Param('id') id: string, @GetUser('id') userId: number) {
+    return this.productsService.remove(+id, userId);
   }
 }

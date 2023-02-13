@@ -114,6 +114,7 @@ export class ProductsService {
           title: term.toUpperCase(),
           code: term.toLowerCase(),
         })
+        .andWhere(`"user_id" =:userId`, { userId: userId })
         .leftJoinAndSelect('product.category', 'category')
         .leftJoinAndSelect('product.productMeasurements', 'productMeasurements')
         .leftJoinAndSelect('product.stockInquiries', 'stockInquiries')
@@ -189,8 +190,10 @@ export class ProductsService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number, userId: number) {
+    const product = await this.findOne(id.toString(), userId);
+
+    await this.productRepository.remove(product);
   }
 
   private handleDBErrors(error: any): never {
