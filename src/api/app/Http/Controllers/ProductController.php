@@ -39,8 +39,10 @@ class ProductController extends Controller
 
         $productMeasurement = new ProductMeasurement;
         $productMeasurement->price = $request['productMeasurement']['price'];
-        $productMeasurement->size = $request['productMeasurement']['size'];
+        $productMeasurement->width = $request['productMeasurement']['width'];
+        $productMeasurement->height = $request['productMeasurement']['height'];
         $productMeasurement->weight = $request['productMeasurement']['weight'];
+        $productMeasurement->weight_measure = $request['productMeasurement']['weight_measure'];
         $productMeasurement->product_id = $product->id;
         $productMeasurement->save();
 
@@ -85,8 +87,10 @@ class ProductController extends Controller
 
         $productMeasurement = ProductMeasurement::find($request['productMeasurement']['id']);
         $productMeasurement->price = $request['productMeasurement']['price'];
-        $productMeasurement->size = $request['productMeasurement']['size'];
+        $productMeasurement->width = $request['productMeasurement']['width'];
+        $productMeasurement->height = $request['productMeasurement']['height'];
         $productMeasurement->weight = $request['productMeasurement']['weight'];
+        $productMeasurement->weight_measure = $request['productMeasurement']['weight_measure'];
         $productMeasurement->product_id = $request['id'];
         $productMeasurement->save();
 
