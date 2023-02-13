@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -20,6 +20,9 @@ import { MaterialModule } from './material.module';
 // Forms
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+// Components
+import { ProductsTableComponent } from './components/products-table/products-table.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +31,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CategoriesComponent,
     LoginComponent,
     RegisterComponent,
-    LayoutComponent
+    LayoutComponent,
+    ProductsTableComponent
   ],
   imports: [
     BrowserModule,

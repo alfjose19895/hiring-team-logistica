@@ -20,20 +20,3 @@
 .category-form-item {
   margin: 0 1rem;
 }
-
-table {
-  width: 100%;
-}
-
-table th, td {
-  text-align: center;
-}
-
-.actions {
-  display: flex;
-  justify-content: center;
-}
-
-.actions button {
-  margin-inline: 0.25rem;
-}
