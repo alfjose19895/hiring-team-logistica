@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 
 import { CategoriesService } from '../categories/categories.service';
 import { PaginationDto } from '../common/dto';
-import { CreateProductDto, UpdateProductDto } from './dto';
+import { CreateProductDto, PaginatedProducts, UpdateProductDto } from './dto';
 import { ProductMeasurement } from './entities/product-measurement.entity';
 import { Product } from './entities/product.entity';
 import { StockInquiry } from './entities/stock-inquiries.entity';
@@ -62,10 +62,24 @@ export class ProductsService {
     }
   }
 
-  findAll(paginationDto: PaginationDto) {
-    const { limit = 10, offset = 0 } = paginationDto;
+  async findAll(paginationDto: PaginationDto): Promise<PaginatedProducts> {
+    const { limit, offset } = paginationDto;
 
-    return `This action returns all products`;
+    const [products, count] = await Promise.all([
+      this.productRepository.find({
+        take: limit,
+        skip: offset,
+
+        // relations: {
+        //   category: true,
+        //   productMeasurements: true,
+        //   stockInquiries: true,
+        // },
+      }),
+      this.productRepository.count({}),
+    ]);
+
+    return { count, products };
   }
 
   findOne(id: number) {

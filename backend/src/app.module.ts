@@ -28,6 +28,7 @@ import { CommonModule } from './common/common.module';
 
       autoLoadEntities: true,
       synchronize: true,
+      logging: true,
     }),
 
     AuthModule,
