@@ -36,6 +36,7 @@ export class ProductsService {
     private readonly dataSource: DataSource,
   ) {}
 
+  // TODO: user relation
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const { category_id, unit, quantity } = createProductDto;
 

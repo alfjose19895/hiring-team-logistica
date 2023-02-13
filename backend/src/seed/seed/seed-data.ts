@@ -77,14 +77,14 @@ export const SEED_PRODUCTS = [
   },
   {
     title: 'Asus Rog Strix G153 Ryzen 9 5980Hx',
-    category_id: 3,
+    category_id: 6,
     unit: 'units',
     quantity: 210,
     price: 1455,
   },
   {
     title: 'PREDATOR HELIOS 300',
-    category_id: 3,
+    category_id: 6,
     unit: 'units',
     quantity: 3,
     price: 1659,
