@@ -5,11 +5,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 import { CategoriesService } from '../categories/categories.service';
 import { PaginationDto } from '../common/dto';
 import { CreateProductDto, PaginatedProducts, UpdateProductDto } from './dto';
+import { ProductChangeHistory } from './entities/product-change-history.entity';
 import { ProductMeasurement } from './entities/product-measurement.entity';
 import { Product } from './entities/product.entity';
 import { StockInquiry } from './entities/stock-inquiries.entity';
@@ -26,7 +27,13 @@ export class ProductsService {
     @InjectRepository(StockInquiry)
     private readonly stockInquiryRepository: Repository<StockInquiry>,
 
+    @InjectRepository(ProductChangeHistory)
+    private readonly productChangeRepository: Repository<ProductChangeHistory>,
+
     private readonly categoriesService: CategoriesService,
+
+    // query runner
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
@@ -55,6 +62,12 @@ export class ProductsService {
         this.productMeasurementRepository.save(productMeasurements),
         this.stockInquiryRepository.save(stockInquiry),
       ]);
+
+      delete productMeasurements.product;
+      delete stockInquiry.product;
+
+      product.productMeasurements = [productMeasurements];
+      product.stockInquiries = [stockInquiry];
 
       return product;
     } catch (error) {
@@ -100,8 +113,67 @@ export class ProductsService {
     return product;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const {
+      measurementUnitId,
+      quantityId,
+      quantity,
+      category_id,
+      unit,
+      ...rest
+    } = updateProductDto;
+    const product = await this.findOne(id.toString());
+    let updatedProduct = await this.productRepository.preload({
+      id,
+      ...rest,
+    });
+
+    // Query Runner
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      if (category_id) {
+        const category = await this.categoriesService.findOne(category_id);
+        updatedProduct.category = category;
+      }
+
+      if (measurementUnitId && unit) {
+        const measurementUnit = await this.updateMeasurementUnit(
+          measurementUnitId,
+          unit,
+        );
+        updatedProduct.productMeasurements = [measurementUnit];
+      }
+
+      if (quantityId && quantity) {
+        const stockInquiry = await this.updateStockInquiry(
+          quantityId,
+          quantity,
+        );
+        updatedProduct.stockInquiries = [stockInquiry];
+      }
+
+      // create history
+      const changeHistory = await this.createChangeHistory(
+        product,
+        JSON.parse(JSON.stringify(updatedProduct)),
+      );
+
+      // thanks to the catch you don't need manager.save()
+      updatedProduct = await this.productRepository.save(updatedProduct);
+      await queryRunner.commitTransaction();
+
+      updatedProduct.changeHistory = [changeHistory];
+
+      return updatedProduct;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   remove(id: number) {
@@ -116,5 +188,49 @@ export class ProductsService {
 
     console.log(error);
     throw new InternalServerErrorException('Please check server logs');
+  }
+
+  private async updateMeasurementUnit(id: number, unit: string) {
+    const measurementUnit = await this.productMeasurementRepository.preload({
+      id,
+      unit,
+    });
+    if (!measurementUnit) {
+      throw new NotFoundException(`Measurement unit with id ${id} not found`);
+    }
+
+    return await this.productMeasurementRepository.save(measurementUnit);
+  }
+
+  private async updateStockInquiry(
+    id: number,
+    quantity: number,
+  ): Promise<StockInquiry> {
+    const stockInquiry = await this.stockInquiryRepository.preload({
+      id,
+      quantity,
+    });
+    if (!stockInquiry)
+      throw new NotFoundException(`Stock Inquiry with id: '${id}' not found`);
+
+    return await this.stockInquiryRepository.save(stockInquiry);
+  }
+
+  private async createChangeHistory(
+    product: Product,
+    updatedProduct: Product,
+  ): Promise<ProductChangeHistory> {
+    delete product.changeHistory;
+
+    let changeHistory = this.productChangeRepository.create({
+      description: `Product '${product.title}' was edited ${JSON.stringify(
+        product,
+      )}  --->  ${JSON.stringify(updatedProduct)}`,
+      product,
+    });
+    changeHistory = await this.productChangeRepository.save(changeHistory);
+    delete changeHistory.product;
+
+    return changeHistory;
   }
 }
