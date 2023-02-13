@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { inventoryManagementApi } from '../../api';
-import { onLoadProducts } from '../../store/dashboard';
+import { onLoadCategories, onLoadProducts } from '../../store/dashboard';
 
 export const useProductStore = () => {
   const dispatch = useDispatch();
-  const { products } = useSelector(state => state.products);
+  const { products, categories } = useSelector(state => state.products);
 
   const startLoadingProducts = async () => {
     try {
@@ -16,9 +16,17 @@ export const useProductStore = () => {
     }
   };
 
+  const startLoadingCategories = async () => {
+    const { data } = await inventoryManagementApi.get('/categories');
+
+    dispatch(onLoadCategories(data));
+  };
+
   return {
     products,
+    categories,
 
     startLoadingProducts,
+    startLoadingCategories,
   };
 };

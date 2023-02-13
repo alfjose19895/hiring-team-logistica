@@ -5,6 +5,7 @@ export const productSlice = createSlice({
   initialState: {
     isLoadingProducts: true,
     products: [],
+    categories: [],
   },
 
   reducers: {
@@ -12,8 +13,12 @@ export const productSlice = createSlice({
       state.isLoadingProducts = false;
       state.products = payload;
     },
+
+    onLoadCategories: (state, { payload = [] }) => {
+      state.categories = payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { onLoadProducts } = productSlice.actions;
+export const { onLoadProducts, onLoadCategories } = productSlice.actions;
