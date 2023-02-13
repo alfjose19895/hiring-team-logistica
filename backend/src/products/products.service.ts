@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { CategoriesService } from '../categories/categories.service';
+import { PaginationDto } from '../common/dto';
 import { CreateProductDto, UpdateProductDto } from './dto';
 import { ProductMeasurement } from './entities/product-measurement.entity';
 import { Product } from './entities/product.entity';
@@ -28,10 +29,10 @@ export class ProductsService {
     private readonly categoriesService: CategoriesService,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
-    const category = await this.categoriesService.findOne(
-      createProductDto.category_id,
-    );
+  async create(createProductDto: CreateProductDto): Promise<Product> {
+    const { category_id, unit, quantity } = createProductDto;
+
+    const category = await this.categoriesService.findOne(category_id);
 
     try {
       const product = this.productRepository.create({
@@ -42,11 +43,11 @@ export class ProductsService {
 
       const productMeasurements = this.productMeasurementRepository.create({
         product,
-        unit: createProductDto.unit,
+        unit,
       });
 
       const stockInquiry = this.stockInquiryRepository.create({
-        quantity: createProductDto.quantity,
+        quantity,
         product,
       });
 
@@ -61,7 +62,9 @@ export class ProductsService {
     }
   }
 
-  findAll() {
+  findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+
     return `This action returns all products`;
   }
 
