@@ -24,6 +24,6 @@ import { ProductsService } from './products.service';
     CategoriesModule,
   ],
 
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, ProductsService],
 })
 export class ProductsModule {}

@@ -2,18 +2,19 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 import { Category } from '../categories/entities/category.entity';
-import { Product } from '../products/entities/product.entity';
+import { ProductsService } from '../products/products.service';
 import { User } from '../users/entities/user.entity';
-import { SEED_CATEGORIES, SEED_USERS } from './seed/seed-data';
+import { SEED_CATEGORIES, SEED_PRODUCTS, SEED_USERS } from './seed/seed-data';
 
 @Injectable()
 export class SeedService {
   private isProd: boolean;
 
   constructor(
+    private readonly dataSource: DataSource,
     private readonly configService: ConfigService,
 
     @InjectRepository(User)
@@ -22,8 +23,7 @@ export class SeedService {
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
 
-    @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
+    private readonly productsService: ProductsService,
   ) {
     this.isProd =
       configService.get<string>('stage') === 'prod' &&
@@ -36,19 +36,47 @@ export class SeedService {
     await this.deleteData();
 
     const [user] = await this.insertUsers();
-    const categories = await this.insertCategories();
+    await this.insertCategories();
+    await this.insertProucts();
   }
 
   private async deleteData() {
-    // users
-    await this.userRepository.createQueryBuilder().delete().where({}).execute();
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
 
-    // categories
-    await this.categoryRepository
-      .createQueryBuilder()
-      .delete()
-      .where({})
-      .execute();
+    const allTables = [
+      'category',
+      'product_change_history',
+      'product_measurement',
+      'products',
+      'stock_inquiry',
+      'users',
+    ];
+    const promisesArr = [];
+
+    await queryRunner.startTransaction();
+
+    try {
+      allTables.forEach(async (tableName) => {
+        promisesArr.push(
+          queryRunner.query(`TRUNCATE TABLE ${tableName} CASCADE`),
+        );
+        promisesArr.push(
+          queryRunner.query(
+            `ALTER SEQUENCE ${tableName}_id_seq RESTART WITH 1`,
+          ),
+        );
+      });
+
+      await Promise.all(promisesArr);
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   private async insertUsers(): Promise<User[]> {
@@ -73,5 +101,15 @@ export class SeedService {
     return await this.categoryRepository.save(categories);
   }
 
-  private async insertProucts() {}
+  private async insertProucts() {
+    const insertPromises = [];
+
+    SEED_PRODUCTS.forEach((product) =>
+      insertPromises.push(this.productsService.create(product)),
+    );
+
+    await Promise.all(insertPromises);
+
+    return true;
+  }
 }
