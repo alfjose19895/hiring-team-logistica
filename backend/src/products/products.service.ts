@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 
+import { UnauthorizedException } from '@nestjs/common';
 import { CategoriesService } from '../categories/categories.service';
 import { PaginationDto } from '../common/dto';
 import { User } from '../users/entities/user.entity';
@@ -37,7 +38,6 @@ export class ProductsService {
     private readonly dataSource: DataSource,
   ) {}
 
-  // TODO: user relation
   async create(
     createProductDto: CreateProductDto,
     user: User,
@@ -137,6 +137,7 @@ export class ProductsService {
       ...rest
     } = updateProductDto;
     const product = await this.findOne(id.toString(), userId);
+    const { productMeasurements, stockInquiries } = product;
     let updatedProduct = await this.productRepository.preload({
       id,
       ...rest,
@@ -157,6 +158,7 @@ export class ProductsService {
         const measurementUnit = await this.updateMeasurementUnit(
           measurementUnitId,
           unit,
+          productMeasurements,
         );
         updatedProduct.productMeasurements = [measurementUnit];
       }
@@ -165,6 +167,7 @@ export class ProductsService {
         const stockInquiry = await this.updateStockInquiry(
           quantityId,
           quantity,
+          stockInquiries,
         );
         updatedProduct.stockInquiries = [stockInquiry];
       }
@@ -206,14 +209,20 @@ export class ProductsService {
     throw new InternalServerErrorException('Please check server logs');
   }
 
-  private async updateMeasurementUnit(id: number, unit: string) {
+  private async updateMeasurementUnit(
+    id: number,
+    unit: string,
+    productMeasurement: ProductMeasurement[],
+  ) {
+    if (id !== productMeasurement[0].id)
+      throw new UnauthorizedException(
+        `Measurement unit with id ${id} not found`,
+      );
+
     const measurementUnit = await this.productMeasurementRepository.preload({
       id,
       unit,
     });
-    if (!measurementUnit) {
-      throw new NotFoundException(`Measurement unit with id ${id} not found`);
-    }
 
     return await this.productMeasurementRepository.save(measurementUnit);
   }
@@ -221,13 +230,18 @@ export class ProductsService {
   private async updateStockInquiry(
     id: number,
     quantity: number,
+    stockInquiries: StockInquiry[],
   ): Promise<StockInquiry> {
+    if (id !== stockInquiries[0].id)
+      throw new UnauthorizedException(
+        `Measurement unit with id ${id} not found`,
+      );
     const stockInquiry = await this.stockInquiryRepository.preload({
       id,
       quantity,
     });
-    if (!stockInquiry)
-      throw new NotFoundException(`Stock Inquiry with id: '${id}' not found`);
+    // if (!stockInquiry)
+    //   throw new NotFoundException(`Stock Inquiry with id: '${id}' not found`);
 
     return await this.stockInquiryRepository.save(stockInquiry);
   }
