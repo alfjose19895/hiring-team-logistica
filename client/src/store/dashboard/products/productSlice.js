@@ -8,7 +8,7 @@ export const productSlice = createSlice({
   },
 
   reducers: {
-    onLoadProduct: (state, { payload = [] }) => {
+    onLoadProducts: (state, { payload = [] }) => {
       state.isLoadingProducts = false;
       state.products = payload;
     },
@@ -16,4 +16,4 @@ export const productSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { increment } = productSlice.actions;
+export const { onLoadProducts } = productSlice.actions;
