@@ -9,6 +9,7 @@ import {
 
 import { Category } from '../../categories/entities/category.entity';
 import { ProductMeasurement } from './product-measurement.entity';
+import { StockInquiry } from './stock-inquiries.entity';
 
 @Entity('products')
 export class Product {
@@ -30,6 +31,9 @@ export class Product {
     (productMeasurement) => productMeasurement.product,
   )
   productMeasurements: ProductMeasurement[];
+
+  @OneToMany(() => StockInquiry, (stockInquiry) => stockInquiry.product)
+  stockInquiries: StockInquiry[];
 
   // changeHistory
 }
