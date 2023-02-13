@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -10,11 +15,17 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 export class CategoriesService {
   constructor(
     @InjectRepository(Category)
-    private categoryRepository: Repository<Category>,
+    private readonly categoryRepository: Repository<Category>,
   ) {}
 
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
+    try {
+      const category = this.categoryRepository.create(createCategoryDto);
+
+      return await this.categoryRepository.save(category);
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
   }
 
   async findAll() {
@@ -29,11 +40,32 @@ export class CategoriesService {
     return category;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    const category = await this.categoryRepository.preload({
+      ...updateCategoryDto,
+      id,
+    });
+    if (!category)
+      throw new NotFoundException(`Category with id '${id} not found`);
+
+    return await this.categoryRepository.save(category);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: number) {
+    const category = await this.findOne(id);
+
+    await this.categoryRepository.remove(category);
+  }
+
+  private handleDBErrors(error: any): never {
+    if (error.code === '23505')
+      throw new BadRequestException([
+        error.detail.replace(/Key|[\(\)\=]/g, '').trim(),
+      ]);
+
+    if (error.code === 'err-001') throw new NotFoundException([error.detail]);
+
+    console.log(error);
+    throw new InternalServerErrorException('Please check server logs');
   }
 }

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -41,15 +42,15 @@ export class ProductsController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductDto,
     @GetUser('id') userId: number,
   ) {
-    return this.productsService.update(+id, updateProductDto, userId);
+    return this.productsService.update(id, updateProductDto, userId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @GetUser('id') userId: number) {
-    return this.productsService.remove(+id, userId);
+  remove(@Param('id', ParseIntPipe) id: number, @GetUser('id') userId: number) {
+    return this.productsService.remove(id, userId);
   }
 }
