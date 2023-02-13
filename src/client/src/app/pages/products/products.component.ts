@@ -37,6 +37,7 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCategories();
+    this.productForm.reset();
   }
 
   handleSubmit() {
@@ -73,6 +74,7 @@ export class ProductsComponent implements OnInit {
         .createProduct(product, productMeasurement, stock)
         .subscribe((productResponse: ProductResponse) => {
           this.productForm.reset();
+          this.productsService.refresh$.emit();
           let { message } = productResponse;
           alert(message);
         });
@@ -121,6 +123,7 @@ export class ProductsComponent implements OnInit {
         .updateProduct(product, productMeasurement, stock)
         .subscribe((productResponse: ProductResponse) => {
           this.productForm.reset();
+          this.productsService.refresh$.emit();
           this.submitButtonText = 'Create';
           let { message } = productResponse;
           alert(message);

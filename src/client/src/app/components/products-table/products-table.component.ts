@@ -21,6 +21,7 @@ export class ProductsTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProducts();
+    this.productsService.refresh$.subscribe(() => this.getProducts());
     this.isStock
       ? this.displayedColumns.push(...['quantity', 'price', 'size', 'weight'])
       : this.displayedColumns.push('actions');
@@ -34,7 +35,6 @@ export class ProductsTableComponent implements OnInit {
       });
       this.dataSource.data = _products;
       this.backupDataSource.data = _products;
-      console.log(_products);
     });
   }
 
@@ -63,6 +63,7 @@ export class ProductsTableComponent implements OnInit {
     this.productsService
       .deleteProduct(id)
       .subscribe((productResponse: ProductResponse) => {
+        this.getProducts();
         let { message } = productResponse;
         alert(message);
       });

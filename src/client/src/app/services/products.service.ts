@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from '../interfaces/product';
 import { ProductMeasurement } from '../interfaces/productMeasurement';
@@ -17,6 +17,7 @@ export class ProductsService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     }),
   };
+  refresh$ = new EventEmitter();
 
   constructor(private httpClient: HttpClient) {}
 
