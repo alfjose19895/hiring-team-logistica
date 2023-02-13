@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('product_measurements', function (Blueprint $table) {
             $table->id();
             $table->integer('price');
-            $table->string('width')->nullable();
-            $table->string('height')->nullable();
+            $table->integer('width')->nullable();
+            $table->integer('height')->nullable();
             $table->integer('weight');
             $table->integer('weight_measure');
             $table->timestamps();
