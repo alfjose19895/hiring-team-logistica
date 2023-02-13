@@ -24,11 +24,14 @@ export class ProductsComponent implements OnInit {
     quantity: new FormControl('', [Validators.required]),
     productMeasurement_id: new FormControl(''),
     price: new FormControl('', [Validators.required]),
-    size: new FormControl('', [Validators.required]),
+    width: new FormControl(''),
+    height: new FormControl(''),
     weight: new FormControl('', [Validators.required]),
+    weight_measure: new FormControl('', [Validators.required]),
   });
   submitButtonText: string = 'Create';
   categories: Category[] = [];
+  weight_measurements: string[] = ['gr', 'lb', 'kg'];
 
   constructor(
     private categoriesService: CategoriesService,
@@ -60,15 +63,17 @@ export class ProductsComponent implements OnInit {
         name: this.productForm.get('name')?.value,
         code: this.productForm.get('code')?.value,
         has_stock: this.productForm.get('has_stock')?.value,
-        category_id: this.productForm.get('category_id')?.value,
+        category_id: this.productForm.get('category_id')?.value
       };
       let productMeasurement: ProductMeasurement = {
         price: this.productForm.get('price')?.value,
-        size: this.productForm.get('size')?.value,
+        width: this.productForm.get('width')?.value,
+        height: this.productForm.get('height')?.value,
         weight: this.productForm.get('weight')?.value,
+        weight_measure: this.productForm.get('weight_measure')?.value
       };
       let stock: Stock = {
-        quantity: this.productForm.get('quantity')?.value,
+        quantity: this.productForm.get('quantity')?.value
       };
       this.productsService
         .createProduct(product, productMeasurement, stock)
@@ -91,10 +96,10 @@ export class ProductsComponent implements OnInit {
       .get('productMeasurement_id')
       ?.setValue(product.product_measurement?.id);
     this.productForm.get('price')?.setValue(product.product_measurement?.price);
-    this.productForm.get('size')?.setValue(product.product_measurement?.size);
-    this.productForm
-      .get('weight')
-      ?.setValue(product.product_measurement?.weight);
+    this.productForm.get('width')?.setValue(product.product_measurement?.width);
+    this.productForm.get('height')?.setValue(product.product_measurement?.height);
+    this.productForm.get('weight')?.setValue(product.product_measurement?.weight);
+    this.productForm.get('weight_measure')?.setValue(product.product_measurement?.weight_measure);
     this.productForm.get('stock_id')?.setValue(product.stock?.id);
     this.productForm.get('quantity')?.setValue(product.stock?.quantity);
     this.submitButtonText = 'Update';
@@ -107,17 +112,18 @@ export class ProductsComponent implements OnInit {
         name: this.productForm.get('name')?.value,
         code: this.productForm.get('code')?.value,
         has_stock: this.productForm.get('has_stock')?.value,
-        category_id: this.productForm.get('category_id')?.value,
+        category_id: this.productForm.get('category_id')?.value
       };
       let productMeasurement: ProductMeasurement = {
-        id: this.productForm.get('productMeasurement_id')?.value,
         price: this.productForm.get('price')?.value,
-        size: this.productForm.get('size')?.value,
+        width: this.productForm.get('width')?.value,
+        height: this.productForm.get('height')?.value,
         weight: this.productForm.get('weight')?.value,
+        weight_measure: this.productForm.get('weight_measure')?.value
       };
       let stock: Stock = {
         id: this.productForm.get('stock_id')?.value,
-        quantity: this.productForm.get('quantity')?.value,
+        quantity: this.productForm.get('quantity')?.value
       };
       this.productsService
         .updateProduct(product, productMeasurement, stock)

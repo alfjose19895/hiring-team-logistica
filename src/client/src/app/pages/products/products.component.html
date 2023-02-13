@@ -44,14 +44,34 @@
                 <mat-label>Price</mat-label>
                 <input matInput formControlName="price" type="number" />
               </mat-form-field>
-              <mat-form-field class="product-form-item" appearance="fill">
-                <mat-label>Size</mat-label>
-                <input matInput formControlName="size" />
-              </mat-form-field>
-              <mat-form-field class="product-form-item" appearance="fill">
-                <mat-label>Weight</mat-label>
-                <input matInput formControlName="weight" type="number" />
-              </mat-form-field>
+              <span class="product-size">
+                <mat-form-field style="margin-right: 1rem;" appearance="fill">
+                  <mat-label>Width</mat-label>
+                  <input matInput formControlName="width" type="number" />
+                </mat-form-field>
+                <label style="margin-right: 1rem;"> X </label>
+                <mat-form-field appearance="fill">
+                  <mat-label>Height</mat-label>
+                  <input matInput formControlName="height" type="number" />
+                </mat-form-field>
+              </span>
+              <span class="product-weight">
+                <mat-form-field style="margin-right: 1rem;" appearance="fill">
+                  <mat-label>Weight</mat-label>
+                  <input matInput formControlName="weight" type="number" />
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Weight Measure</mat-label>
+                  <mat-select formControlName="weight_measure">
+                    <mat-option
+                      *ngFor="let wm of weight_measurements"
+                      [value]="wm"
+                    >
+                      {{ wm }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </span>
             </section>
           </div>
           <button

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('width')->nullable();
             $table->integer('height')->nullable();
             $table->integer('weight');
-            $table->integer('weight_measure');
+            $table->string('weight_measure');
             $table->timestamps();
         });
 
