@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 
+import { User } from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { Auth, GetUser } from './decorators';
 import { LoginDto, SignupDto } from './dto';
@@ -18,13 +19,9 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
-  @Get('private')
   @Auth()
-  testingPrivateRoute(@GetUser('email') userEmail: string) {
-    return {
-      ok: true,
-      msg: 'Hello world from a private route',
-      userEmail,
-    };
+  @Get('renew-token')
+  checkAuthStatus(@GetUser() user: User) {
+    return this.authService.checkAuthStatus(user);
   }
 }

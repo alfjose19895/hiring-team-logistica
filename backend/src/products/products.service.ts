@@ -49,6 +49,7 @@ export class ProductsService {
     try {
       const product = this.productRepository.create({
         ...createProductDto,
+        // ...(!createProductDto.code && { code: createUniqueId() }),
         category,
         user,
       });
@@ -136,6 +137,7 @@ export class ProductsService {
       unit,
       ...rest
     } = updateProductDto;
+    console.log('\n\n\n\n', updateProductDto, '\n\n\n');
     const product = await this.findOne(id.toString(), userId);
     const { productMeasurements, stockInquiries } = product;
     let updatedProduct = await this.productRepository.preload({

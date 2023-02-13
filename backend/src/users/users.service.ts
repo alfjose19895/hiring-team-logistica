@@ -53,9 +53,9 @@ export class UsersService {
       });
       return user;
     } catch (error) {
-      throw new UnauthorizedException(
+      throw new UnauthorizedException([
         'There was a problem logging in. Check your email and password or create an account',
-      );
+      ]);
     }
   }
 
@@ -69,11 +69,13 @@ export class UsersService {
 
   private handleDBErrors(error: any): never {
     if (error.code === '23505')
-      throw new BadRequestException(error.detail.replace('Key ', ''));
+      throw new BadRequestException([
+        error.detail.replace(/Key|[\(\)\=]/g, '').trim(),
+      ]);
 
     if (error.code === 'err-001') throw new NotFoundException(error.detail);
 
     console.log(error);
-    throw new InternalServerErrorException('Please check server logs');
+    throw new InternalServerErrorException(['Please check server logs']);
   }
 }

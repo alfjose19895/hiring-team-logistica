@@ -29,4 +29,8 @@ export class CreateProductDto {
   @IsNumber()
   @IsPositive()
   quantity: number;
+
+  @IsString()
+  @IsOptional()
+  code?: string;
 }

@@ -1,5 +1,6 @@
 import {
   BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -9,7 +10,7 @@ import {
 } from 'typeorm';
 
 import { Category } from '../../categories/entities/category.entity';
-import { createUniqueId } from '../../common/utils';
+import { createRandomSku } from '../../common/utils';
 import { ProductChangeHistory } from './product-change-history.entity';
 import { ProductMeasurement } from './product-measurement.entity';
 import { StockInquiry } from './stock-inquiries.entity';
@@ -33,7 +34,7 @@ export class Product {
   price: number;
 
   // relations
-  @ManyToOne(() => User, (user) => user.products, { eager: true })
+  @ManyToOne(() => User, (user) => user.products)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
@@ -63,6 +64,11 @@ export class Product {
 
   @BeforeInsert()
   addProductCode() {
-    this.code = createUniqueId();
+    if (!this.code) this.code = createRandomSku(this.category.name);
+  }
+
+  @BeforeUpdate()
+  updateProductCode() {
+    this.addProductCode();
   }
 }

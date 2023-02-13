@@ -17,8 +17,8 @@ export class CategoriesService {
     return 'This action adds a new category';
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    return await this.categoryRepository.find({});
   }
 
   async findOne(id: number): Promise<Category> {

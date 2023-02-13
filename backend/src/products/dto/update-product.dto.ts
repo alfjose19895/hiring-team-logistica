@@ -12,12 +12,6 @@ import {
 import { CreateProductDto } from './create-product.dto';
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {
-  @IsString()
-  @MinLength(3)
-  @IsNotEmpty()
-  @IsOptional()
-  code?: string;
-
   @IsNumber()
   @Min(1)
   @IsOptional()
