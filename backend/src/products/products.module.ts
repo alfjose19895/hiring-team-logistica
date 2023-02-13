@@ -21,5 +21,7 @@ import { ProductsService } from './products.service';
       ProductChangeHistory,
     ]),
   ],
+
+  exports: [TypeOrmModule],
 })
 export class ProductsModule {}
