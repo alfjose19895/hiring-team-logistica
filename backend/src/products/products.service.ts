@@ -1,11 +1,64 @@
-import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { CategoriesService } from '../categories/categories.service';
+import { CreateProductDto, UpdateProductDto } from './dto';
+import { ProductMeasurement } from './entities/product-measurement.entity';
+import { Product } from './entities/product.entity';
+import { StockInquiry } from './entities/stock-inquiries.entity';
 
 @Injectable()
 export class ProductsService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+
+    @InjectRepository(ProductMeasurement)
+    private readonly productMeasurementRepository: Repository<ProductMeasurement>,
+
+    @InjectRepository(StockInquiry)
+    private readonly stockInquiryRepository: Repository<StockInquiry>,
+
+    private readonly categoriesService: CategoriesService,
+  ) {}
+
+  async create(createProductDto: CreateProductDto) {
+    const category = await this.categoriesService.findOne(
+      createProductDto.category_id,
+    );
+
+    try {
+      const product = this.productRepository.create({
+        ...createProductDto,
+        category,
+      });
+      await this.productRepository.save(product);
+
+      const productMeasurements = this.productMeasurementRepository.create({
+        product,
+        unit: createProductDto.unit,
+      });
+
+      const stockInquiry = this.stockInquiryRepository.create({
+        quantity: createProductDto.quantity,
+        product,
+      });
+
+      await Promise.all([
+        this.productMeasurementRepository.save(productMeasurements),
+        this.stockInquiryRepository.save(stockInquiry),
+      ]);
+
+      return product;
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
   }
 
   findAll() {
@@ -22,5 +75,15 @@ export class ProductsService {
 
   remove(id: number) {
     return `This action removes a #${id} product`;
+  }
+
+  private handleDBErrors(error: any): never {
+    if (error.code === '23505')
+      throw new BadRequestException(error.detail.replace('Key ', ''));
+
+    if (error.code === 'err-001') throw new NotFoundException(error.detail);
+
+    console.log(error);
+    throw new InternalServerErrorException('Please check server logs');
   }
 }
