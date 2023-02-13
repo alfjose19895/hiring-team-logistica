@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -9,14 +10,17 @@ import {
 import { Product } from './product.entity';
 
 @Entity()
-export class StockInquiry {
+export class ProductChangeHistory {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  quantity: number;
-
-  @ManyToOne(() => Product, (product) => product.stockInquiries)
+  @ManyToOne(() => Product, (product) => product.changeHistory)
   @JoinColumn({ name: 'product_id' })
   product: Product;
+
+  @CreateDateColumn({ name: 'change_date' })
+  changeDate: Date;
+
+  @Column()
+  description: string;
 }

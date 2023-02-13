@@ -17,10 +17,10 @@ export class User {
   @Column('text', { select: false })
   password: string;
 
-  @Column('text')
+  @Column('text', { name: 'full_name' })
   fullName: string;
 
-  @Column('bool', { default: true })
+  @Column('bool', { name: 'is_active', default: true })
   isActive: boolean;
 
   @BeforeInsert()

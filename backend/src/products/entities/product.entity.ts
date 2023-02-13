@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { Category } from '../../categories/entities/category.entity';
+import { ProductChangeHistory } from './product-change-history.entity';
 import { ProductMeasurement } from './product-measurement.entity';
 import { StockInquiry } from './stock-inquiries.entity';
 
@@ -19,7 +20,7 @@ export class Product {
   @Column('text')
   code: string;
 
-  @Column('bool', { default: true })
+  @Column('bool', { name: 'has_stock', default: true })
   hasStock: boolean;
 
   @ManyToOne(() => Category, (category) => category.products)
@@ -35,5 +36,9 @@ export class Product {
   @OneToMany(() => StockInquiry, (stockInquiry) => stockInquiry.product)
   stockInquiries: StockInquiry[];
 
-  // changeHistory
+  @OneToMany(
+    () => ProductChangeHistory,
+    (changeHistory) => changeHistory.product,
+  )
+  changeHistory: ProductChangeHistory[];
 }
