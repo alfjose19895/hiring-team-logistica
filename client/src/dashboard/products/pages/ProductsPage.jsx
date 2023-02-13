@@ -1,12 +1,17 @@
 import { useEffect } from 'react';
+
 import { Table } from '../../components/table';
 import { useProductStore } from '../../hooks';
+import { ProductForm } from '../components';
+import { CustomModal } from './../../components/modal';
 
 const ProductsPage = () => {
-  const { startLoadingProducts, products } = useProductStore();
+  const { startLoadingProducts, products, startLoadingCategories } =
+    useProductStore();
 
   useEffect(() => {
     startLoadingProducts();
+    startLoadingCategories();
   }, []);
 
   return (
@@ -16,6 +21,10 @@ const ProductsPage = () => {
       <div className="mt-16 p-9">
         {products?.products?.length > 0 && <Table data={products.products} />}
       </div>
+
+      <CustomModal>
+        <ProductForm />
+      </CustomModal>
     </>
   );
 };
