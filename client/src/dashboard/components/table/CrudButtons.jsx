@@ -4,13 +4,15 @@ import { Delete, Edit } from '@mui/icons-material';
 import { Box, IconButton, Tooltip } from '@mui/material';
 
 import { useUiStore } from '../../../hooks/useUiStore';
+import { useProductStore } from '../../hooks';
 
 const CrudButtons = ({ row }) => {
   const { openModal } = useUiStore();
+  const { setActiveProduct } = useProductStore();
 
   const handleEdit = product => {
-    console.log(product);
     openModal();
+    setActiveProduct(product);
   };
 
   const handleDelete = product => {

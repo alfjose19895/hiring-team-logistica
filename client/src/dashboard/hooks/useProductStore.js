@@ -1,10 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { inventoryManagementApi } from '../../api';
-import { onLoadCategories, onLoadProducts } from '../../store/dashboard';
+import {
+  onLoadCategories,
+  onLoadProducts,
+  onSetActiveProduct,
+} from '../../store/dashboard';
 
 export const useProductStore = () => {
   const dispatch = useDispatch();
-  const { products, categories } = useSelector(state => state.products);
+  const { products, categories, activeProduct } = useSelector(
+    state => state.products
+  );
 
   const startLoadingProducts = async () => {
     try {
@@ -22,11 +28,17 @@ export const useProductStore = () => {
     dispatch(onLoadCategories(data));
   };
 
+  const setActiveProduct = product => {
+    dispatch(onSetActiveProduct(product));
+  };
+
   return {
     products,
     categories,
+    activeProduct,
 
     startLoadingProducts,
     startLoadingCategories,
+    setActiveProduct,
   };
 };

@@ -9,7 +9,8 @@ import React from 'react';
 import { useProductStore } from '../../hooks';
 
 export const ProductForm = () => {
-  const { categories } = useProductStore();
+  const { categories, activeProduct } = useProductStore();
+  console.log(activeProduct);
 
   return (
     <form className="p-6 shadow mx-5 my-12 rounded-md flex flex-col gap-4">
@@ -29,6 +30,7 @@ export const ProductForm = () => {
           label="Category"
           // value={'age'}
           // onChange={handleChange}
+          defaultValue=""
         >
           {categories?.map(({ id, name }) => (
             <MenuItem key={id} value={id}>
@@ -71,6 +73,7 @@ export const ProductForm = () => {
         <InputLabel>Status</InputLabel>
         <Select
           label="Status"
+          defaultValue=""
           // value={'age'}
           // onChange={handleChange}
         >
