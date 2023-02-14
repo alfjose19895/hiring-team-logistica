@@ -26,6 +26,11 @@ export const productSlice = createSlice({
     onAddNewProduct: (state, { payload }) => {
       state.products.products.unshift(payload);
     },
+    onUpdateProduct: (state, { payload }) => {
+      state.products.products = state.products.products.map(product =>
+        product.id === payload.id ? payload : product
+      );
+    },
   },
 });
 
@@ -35,4 +40,5 @@ export const {
   onLoadCategories,
   onSetActiveProduct,
   onAddNewProduct,
+  onUpdateProduct,
 } = productSlice.actions;

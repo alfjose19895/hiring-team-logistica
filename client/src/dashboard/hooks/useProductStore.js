@@ -5,8 +5,9 @@ import {
   onLoadCategories,
   onLoadProducts,
   onSetActiveProduct,
+  onUpdateProduct,
 } from '../../store/dashboard';
-import { parseCreateProduct } from '../products/helpers';
+import { parseCreateProduct, parseUpdateProduct } from '../products/helpers';
 
 export const useProductStore = () => {
   const dispatch = useDispatch();
@@ -34,8 +35,13 @@ export const useProductStore = () => {
     try {
       // updating
       if (product.id) {
-        console.log(product);
-        return;
+        const prodToUpdate = parseUpdateProduct(product);
+        const { data } = await inventoryManagementApi.patch(
+          `/products/${product.id}`,
+          prodToUpdate
+        );
+
+        return dispatch(onUpdateProduct(data));
       }
 
       // creating
@@ -44,7 +50,7 @@ export const useProductStore = () => {
         '/products',
         prodToAdd
       );
-      console.log(prodToAdd);
+
       dispatch(onAddNewProduct(data));
     } catch (error) {
       console.log(error);
