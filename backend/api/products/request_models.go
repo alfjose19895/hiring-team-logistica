@@ -1,5 +1,7 @@
 package products
 
+import "com.funiber.org/models"
+
 type ProductInput struct {
 	Code       string `json:"code"`
 	Name       string `json:"name"`
@@ -23,8 +25,8 @@ type HistoryInput struct {
 }
 
 type HistoryOutput struct {
-	ProductID uint               `json:"product_id"`
-	Quantity  ProductStock       `json:"quantity"`
-	Category  ProductCategory    `json:"category"`
-	Measure   ProductMeasurement `json:"measure"`
+	ProductID uint                      `json:"product_id"`
+	Quantity  models.ProductStock       `json:"quantity"`
+	Category  models.ProductCategory    `json:"category"`
+	Measure   models.ProductMeasurement `json:"measure"`
 }

@@ -2,6 +2,7 @@ package products
 
 import (
 	"com.funiber.org/database"
+	"com.funiber.org/models"
 	"com.funiber.org/pkg"
 	"github.com/gofiber/fiber/v2"
 )
@@ -11,10 +12,10 @@ func CreateProduct(ctx *fiber.Ctx) error {
 
 	var productInput ProductInput
 	var productOutput ProductOutput
-	var productModel Product
-	var productCategory ProductCategory
-	var productMeasurement ProductMeasurement
-	var productStock ProductStock
+	var productModel models.Product
+	var productCategory models.ProductCategory
+	var productMeasurement models.ProductMeasurement
+	var productStock models.ProductStock
 
 	if err := ctx.BodyParser(&productInput); err != nil {
 		return pkg.BadRequest("invalid request body: " + err.Error())
@@ -66,14 +67,14 @@ func CreateProduct(ctx *fiber.Ctx) error {
 func GetProducts(ctx *fiber.Ctx) error {
 	db := database.DB
 
-	var products []Product
+	var products []models.Product
 	var productsOutput []ProductOutput
 
 	db.Find(&products)
 
 	for _, product := range products {
 		var productOutput ProductOutput
-		var productStock ProductStock
+		var productStock models.ProductStock
 		if product.InStock {
 			db.Where("product_id = ?", product.ID).First(&productStock)
 		}

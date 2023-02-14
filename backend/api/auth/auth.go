@@ -1,7 +1,9 @@
 package auth
 
 import (
+	"com.funiber.org/api/activity"
 	"com.funiber.org/database"
+	"com.funiber.org/models"
 	"com.funiber.org/pkg"
 	"errors"
 	"github.com/gofiber/fiber/v2"
@@ -15,16 +17,17 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	ID        uint      `json:"id"`
-	Username  string    `json:"username"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
-	LastLogin time.Time `json:"last_login"`
+	ID        uint       `json:"id"`
+	Username  string     `json:"username"`
+	Email     string     `json:"email"`
+	Password  string     `json:"password"`
+	LastLogin *time.Time `json:"last_login"`
 }
 
 func Login(ctx *fiber.Ctx) error {
 	db := database.DB
 	input := new(LoginRequest)
+
 	// generate time for last login
 	lastLogin, _ := time.Parse("02/01/2006 15:04:05", time.Now().Format("02/01/2006 15:04:05"))
 
@@ -35,31 +38,43 @@ func Login(ctx *fiber.Ctx) error {
 	identity := input.Identity
 	password := input.Password
 
-	var user Account
-	if err := db.Where("username = ?", identity).Or("email = ?", identity).Find(&user).Error; err != nil {
+	var user models.Account
+	// check if the identity exists in the database
+	if err := db.Where("username = ? OR email = ?", identity, identity).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return pkg.EntityNotFound("Could not find valid identity")
+			return pkg.Unauthorized("The credentials are invalid: " + err.Error())
 		}
-		return pkg.UnexpectedError(err.Error())
+		return pkg.UnexpectedError("Error while querying the database:" + err.Error())
 	}
 
 	if !pkg.PasswordMatch(password, user.Password) {
-		return pkg.Unauthorized("Invalid password")
+		reason := "Invalid password"
+		activity.PushLoginActivity(&user, ctx.IP(), &reason)                            // login logs only
+		activity.PushActivity(&user, "Failed login attempt: "+reason, "AUTH", ctx.IP()) // push to global logs
+		return pkg.Unauthorized(reason)
 	}
 
-	preLastLogin := user.LastLogin
+	activity.PushLoginActivity(&user, ctx.IP(), nil)                                  // login logs only
+	activity.PushActivity(&user, "User was successfully logged in", "AUTH", ctx.IP()) //  push to global logs
 
-	// Update the last login field
-	db.Model(&user).Update("last_login", lastLogin)
+	// get the last login from the database to return it
+	prevLogin := user.LastLogin
 
-	user.LastLogin = preLastLogin // we will return the prev last login to make more sense :)
+	// update the last login that we generated
+	defer db.Model(&user).Update("last_login", &lastLogin)
 
-	return ctx.Status(fiber.StatusOK).JSON(user)
-
+	// return the previous login
+	return ctx.Status(fiber.StatusOK).JSON(LoginResponse{
+		ID:        user.ID,
+		Username:  user.Username,
+		Email:     user.Email,
+		Password:  user.Password,
+		LastLogin: prevLogin,
+	})
 }
 
 func GetAccount(ctx *fiber.Ctx) error {
-	var user Account
+	var user models.Account
 	db := database.DB
 	id := ctx.Params("id")
 

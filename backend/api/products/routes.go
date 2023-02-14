@@ -10,12 +10,15 @@ func Routes(route fiber.Router) {
 
 	// Product categories
 	categories := products.Group("/categories")
-	categories.Post("/create", CreateCategory)
-	categories.Put("/update/:id", UpdateCategory)
-	categories.Delete("/delete/:id", DeleteCategory)
+	categories.Post("/", CreateCategory)
+	categories.Put("/:id", UpdateCategory)
+	categories.Delete("/:id", DeleteCategory)
 	categories.Get("/", GetCategories)
 
-	// Product measurements
-	measurements := products.Group("/measure")
-	measurements.Post("/create", CreateMeasure)
+	//Product measurements
+	measurements := route.Group("/measure")
+	measurements.Post("/", CreateMeasure)
+	measurements.Get("/", GetAllMeasures)
+	measurements.Get("/:id", GetMeasure)
+	measurements.Delete("/:id", DeleteMeasure)
 }
