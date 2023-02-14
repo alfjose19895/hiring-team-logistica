@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { inventoryManagementApi } from '../../api';
+import { onClearGlobalAlert, onShowGlobalAlert } from '../../store';
 import {
   onAddNewCategory,
   onLoadCategories,
@@ -47,9 +48,14 @@ export const useCategoryStore = () => {
 
       dispatch(onAddNewCategory(data));
     } catch (error) {
-      console.log(error);
-      console.log(error?.response?.data);
+      dispatch(
+        onShowGlobalAlert({ msg: error?.response?.data?.message, error: true })
+      );
     }
+
+    setTimeout(() => {
+      dispatch(onClearGlobalAlert());
+    }, 1400);
   };
 
   // const startDeletingCategory = async id => {

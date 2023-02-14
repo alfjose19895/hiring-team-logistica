@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { inventoryManagementApi } from '../../api';
+import { onClearGlobalAlert, onShowGlobalAlert } from '../../store';
 import {
   onAddNewProduct,
   onDeleteProduct,
+  onLoadCategories,
   onLoadProducts,
+  onSetActiveCategory,
   onSetActiveProduct,
   onUpdateProduct,
-  onLoadCategories,
-  
-  onSetActiveCategory,
 } from '../../store/dashboard';
 import { parseCreateProduct, parseUpdateProduct } from '../products/helpers';
 
@@ -71,9 +71,14 @@ export const useProductStore = () => {
 
       dispatch(onAddNewProduct(data));
     } catch (error) {
-      console.log(error);
-      console.log(error?.response?.data);
+      dispatch(
+        onShowGlobalAlert({ msg: error?.response?.data?.message, error: true })
+      );
     }
+
+    setTimeout(() => {
+      dispatch(onClearGlobalAlert());
+    }, 1400);
   };
 
   const startDeletingProduct = async id => {

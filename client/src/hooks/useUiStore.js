@@ -1,10 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { onCloseModal, onOpenModal } from '../store';
+import { onClearAlert, onCloseModal, onOpenModal, onShowAlert } from '../store';
 
 export const useUiStore = () => {
   const dispatch = useDispatch();
 
-  const { isModalOpen } = useSelector(state => state.ui);
+  const {
+    isModalOpen,
+    errorMessagesUi,
+    isThereAnyMsg,
+    alertUi,
+    globalAlert,
+    isThereAnyGlobalMsg,
+  } = useSelector(state => state.ui);
 
   const openModal = () => {
     dispatch(onOpenModal());
@@ -13,12 +20,26 @@ export const useUiStore = () => {
     dispatch(onCloseModal());
   };
 
+  const setErrorMessages = errors => {
+    dispatch(onShowAlert({ msg: errors, error: true }));
+
+    setTimeout(() => {
+      dispatch(onClearAlert());
+    }, 1800);
+  };
+
   return {
     // Properties
     isModalOpen,
+    errorMessagesUi,
+    isThereAnyMsg,
+    alertUi,
+    globalAlert,
+    isThereAnyGlobalMsg,
 
     // Methods
     openModal,
     closeModal,
+    setErrorMessages,
   };
 };

@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useForm, useUiStore } from '../../../hooks';
+import { CustomAlert } from '../../components/alert';
 import { useProductStore } from '../../hooks';
 
 const productFormFields = {
@@ -20,17 +21,37 @@ const productFormFields = {
   stockInquiries: [{ id: '', quantity: '' }],
 };
 
+const formValidations = {
+  title: [
+    value => value.length >= 4,
+    'Title must be longer than or equal to 3 characters',
+  ],
+  category: [value => +value.id > 0, 'Category is required'],
+  price: [value => +value >= 1, 'Price must be a positive number'],
+
+  productMeasurements: [
+    value => value[0]?.unit?.length >= 1,
+    'Product Measurements is required',
+  ],
+  stockInquiries: [
+    value => +value[0]?.quantity > 0,
+    'Stock Inquiries must be a positive number',
+  ],
+};
+
 export const ProductForm = () => {
   const { categories, activeProduct, startSavingProduct, setActiveProduct } =
     useProductStore();
-  const { closeModal } = useUiStore();
+  const { closeModal, setErrorMessages, isThereAnyMsg } = useUiStore();
   const {
     formValues,
     handleInputChange,
     setFormValues,
     handleInputChangeNested,
     handleInputChangeArr,
-  } = useForm(productFormFields);
+    formValidation,
+    isFormValid,
+  } = useForm(productFormFields, formValidations);
   const {
     title,
     code,
@@ -47,9 +68,9 @@ export const ProductForm = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    if (!isFormValid) return setErrorMessages(formValidation);
 
     await startSavingProduct(formValues);
-
     closeModal();
     setActiveProduct(null);
   };
@@ -59,6 +80,8 @@ export const ProductForm = () => {
       onSubmit={handleSubmit}
       className="p-6 shadow mx-5 my-12 rounded-md flex flex-col gap-4"
     >
+      {isThereAnyMsg && <CustomAlert />}
+
       <TextField
         label="Product Name"
         type="text"
@@ -126,6 +149,7 @@ export const ProductForm = () => {
         name="price"
         value={price}
         onChange={handleInputChange}
+        min={'1'}
       />
 
       {activeProduct?.id && (

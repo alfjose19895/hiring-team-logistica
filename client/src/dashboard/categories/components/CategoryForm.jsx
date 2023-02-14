@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 import { useForm, useUiStore } from '../../../hooks';
 import { useCategoryStore } from '../../hooks';
+import { CustomAlert } from './../../components/alert';
 
 const formFields = {
   name: '',
@@ -11,7 +12,7 @@ const formFields = {
 const CategoryForm = () => {
   const { activeCategory, setActiveCategory, startSavingCategory } =
     useCategoryStore();
-  const { closeModal } = useUiStore();
+  const { closeModal, setErrorMessages, isThereAnyMsg } = useUiStore();
   const { name, formValues, handleInputChange, setFormValues } =
     useForm(formFields);
 
@@ -21,6 +22,10 @@ const CategoryForm = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    if (Object.values(formValues).some(field => field.length < 3))
+      return setErrorMessages([
+        'Name must be longer than or equal to 3 characters',
+      ]);
 
     await startSavingCategory(formValues);
 
@@ -33,6 +38,8 @@ const CategoryForm = () => {
       onSubmit={handleSubmit}
       className="p-6 shadow mx-5 my-12 rounded-md flex flex-col gap-4"
     >
+      {isThereAnyMsg && <CustomAlert />}
+
       <TextField
         label="Product Name"
         type="text"
