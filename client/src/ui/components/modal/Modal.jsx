@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import * as React from 'react';
+import { useProductStore } from '../../../dashboard/hooks';
 import { useUiStore } from '../../../hooks/useUiStore';
 
 const style = {
@@ -15,11 +16,17 @@ const style = {
 };
 
 const CustomModal = ({ children }) => {
+  const { setActiveProduct } = useProductStore();
   const { isModalOpen, closeModal } = useUiStore();
+
+  const handleClose = () => {
+    closeModal();
+    setActiveProduct({});
+  };
 
   return (
     <div>
-      <Modal open={isModalOpen} onClose={() => closeModal()}>
+      <Modal open={isModalOpen} onClose={handleClose}>
         <Box sx={style}>{children}</Box>
       </Modal>
     </div>
