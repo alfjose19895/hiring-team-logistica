@@ -4,7 +4,7 @@ import { Delete, Edit } from '@mui/icons-material';
 import { Box, IconButton, Tooltip } from '@mui/material';
 
 import { useUiStore } from '../../../hooks/useUiStore';
-import { useProductStore } from '../../hooks';
+import { useCategoryStore, useProductStore } from '../../hooks';
 
 const dictionary = {
   product: {
@@ -19,8 +19,8 @@ const dictionary = {
 
 const CrudButtons = ({ row, tag }) => {
   const { openModal } = useUiStore();
-  const { setActiveProduct, startDeletingProduct, setActiveCategory } =
-    useProductStore();
+  const { setActiveProduct, startDeletingProduct } = useProductStore();
+  const { setActiveCategory, startDeletingCategory } = useCategoryStore();
 
   const handleEdit = original => {
     openModal();
@@ -35,7 +35,7 @@ const CrudButtons = ({ row, tag }) => {
     (confirm('Are you shure?') &&
       tag === 'product' &&
       (await dictionary[tag]['delete'](startDeletingProduct, original.id))) ||
-      (await dictionary[tag]['delete'](startDeletingProduct, original.id));
+      (await dictionary[tag]['delete'](startDeletingCategory, original.id));
   };
 
   return (
@@ -45,11 +45,13 @@ const CrudButtons = ({ row, tag }) => {
           <Edit />
         </IconButton>
       </Tooltip>
-      <Tooltip arrow placement="right" title="Delete">
-        <IconButton color="error" onClick={() => handleDelete(row.original)}>
-          <Delete />
-        </IconButton>
-      </Tooltip>
+      {tag !== 'category' && (
+        <Tooltip arrow placement="right" title="Delete">
+          <IconButton color="error" onClick={() => handleDelete(row.original)}>
+            <Delete />
+          </IconButton>
+        </Tooltip>
+      )}
     </Box>
   );
 };

@@ -1,15 +1,16 @@
-import { useEffect } from 'react';
 import { Button, TextField } from '@mui/material';
+import { useEffect } from 'react';
 
 import { useForm, useUiStore } from '../../../hooks';
-import { useProductStore } from '../../hooks';
+import { useCategoryStore } from '../../hooks';
 
 const formFields = {
   name: '',
 };
 
 const CategoryForm = () => {
-  const { activeCategory, setActiveCategory } = useProductStore();
+  const { activeCategory, setActiveCategory, startSavingCategory } =
+    useCategoryStore();
   const { closeModal } = useUiStore();
   const { name, formValues, handleInputChange, setFormValues } =
     useForm(formFields);
@@ -21,8 +22,7 @@ const CategoryForm = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    // await startSavingProduct(formValues);
-    console.log(formValues);
+    await startSavingCategory(formValues);
 
     closeModal();
     setActiveCategory(null);

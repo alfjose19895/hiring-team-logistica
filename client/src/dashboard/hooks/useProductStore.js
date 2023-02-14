@@ -3,24 +3,23 @@ import { inventoryManagementApi } from '../../api';
 import {
   onAddNewProduct,
   onDeleteProduct,
-  onLoadCategories,
   onLoadProducts,
-  onSetActiveCategory,
   onSetActiveProduct,
   onUpdateProduct,
+  onLoadCategories,
+  
+  onSetActiveCategory,
 } from '../../store/dashboard';
 import { parseCreateProduct, parseUpdateProduct } from '../products/helpers';
 
 export const useProductStore = () => {
   const dispatch = useDispatch();
-  const {
-    products,
-    categories,
-    activeProduct,
-    activeCategory,
-    isLoadingProducts,
-    isLoadingCategories,
-  } = useSelector(state => state.products);
+  const { products, activeProduct, isLoadingProducts } = useSelector(
+    state => state.products
+  );
+  const { categories, activeCategory, isLoadingCategories } = useSelector(
+    state => state.categories
+  );
 
   const startLoadingProducts = async () => {
     try {
@@ -91,17 +90,17 @@ export const useProductStore = () => {
   return {
     isLoadingProducts,
     products,
-    categories,
     activeProduct,
-    isLoadingCategories,
 
     startLoadingProducts,
-    startLoadingCategories,
     setActiveProduct,
     startSavingProduct,
     startDeletingProduct,
 
+    isLoadingCategories,
+    categories,
     activeCategory,
+    startLoadingCategories,
     setActiveCategory,
   };
 };
