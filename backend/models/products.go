@@ -1,4 +1,4 @@
-package products
+package models
 
 import "com.funiber.org/database"
 
@@ -20,9 +20,14 @@ type ProductCategory struct {
 
 type ProductMeasurement struct {
 	database.DefaultModel
-	Name         string `gorm:"size:30; not null; unique" json:"name"`
-	Abbreviation string `gorm:"size:10; not null; index; unique" json:"abbreviation"`
-	Description  string `gorm:"size:100" json:"description"`
+	TypeMeasurement   TypeMeasurement `gorm:"foreignKey:TypeMeasurementID" json:"type_measurement"`
+	TypeMeasurementID uint            `json:"type_measurement_id"`
+	Height            *float64        `gorm:"type:decimal(10,2)" json:"height"`
+	Width             *float64        `gorm:"type:decimal(10,2)" json:"width"`
+	Depth             *float64        `gorm:"type:decimal(10,2)" json:"depth"`
+	Weight            *float64        `gorm:"type:decimal(10,2)" json:"weight"`
+	WeightUnit        *uint           `gorm:"size:10" json:"weight_unit"`
+	WeightMeasure     *string         `gorm:"size:10" json:"weight_measure"`
 }
 
 type ProductStock struct {
