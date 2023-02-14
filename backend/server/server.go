@@ -16,6 +16,7 @@ import (
 func setupMiddlewares(app *fiber.App) {
 	app.Use(cors.New(
 		cors.Config{
+			AllowHeaders: "Origin, Content-Type, Accept, Authorization, Access-Control-Allow-Headers",
 			AllowOrigins: "localhost:3000,localhost:8080",
 		}))
 	if os.Getenv("ENABLE_LOGGER") == "true" {
