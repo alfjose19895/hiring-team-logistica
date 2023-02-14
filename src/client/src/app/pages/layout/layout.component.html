@@ -21,7 +21,7 @@
     <mat-toolbar class="toolbar">
       <span class="drawer_title"> {{ route }} </span>
       <span>
-        <button routerLink="/login" mat-button class="shadow">
+        <button (click)="logout()" mat-button class="shadow">
           <mat-icon>power_settings_new</mat-icon>
           Salir
         </button>
