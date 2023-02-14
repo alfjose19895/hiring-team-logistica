@@ -1,11 +1,10 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    code.dev:
+    api:
         build:
-            context: ./docker
             dockerfile: Dockerfile
-        container_name: candidate_evaluation
+        container_name: candidate_evaluation_api
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
