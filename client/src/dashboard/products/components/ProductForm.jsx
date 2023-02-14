@@ -6,42 +6,49 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from '../../../hooks';
 import { useProductStore } from '../../hooks';
 
 const productFormFields = {
   title: '',
-  category: '',
-  sku: '',
-  productMeasurements: '',
-  stockInquiries: '',
+  code: '',
   price: 0,
   hasStock: true,
+  category: { id: '', name: '' },
+  productMeasurements: [{ id: '', unit: '' }],
+  stockInquiries: [{ id: '', unit: '' }],
 };
 
 export const ProductForm = () => {
   const { categories, activeProduct } = useProductStore();
-  const { handleInputChange, setFormValuesFx } = useForm(productFormFields);
+  const {
+    formValues,
+    handleInputChange,
+    setFormValues,
+    handleInputChangeNested,
+    handleInputChangeArr,
+  } = useForm(productFormFields);
   const {
     title,
-    category,
-    sku,
-    productMeasurements,
-    stockInquiries,
+    code,
     price,
     hasStock,
-  } = activeProduct;
+    category,
+    productMeasurements,
+    stockInquiries,
+  } = formValues;
 
   useEffect(() => {
-    if (activeProduct !== null) setFormValuesFx({ ...activeProduct });
+    if (activeProduct.id) setFormValues({ ...activeProduct });
   }, [activeProduct]);
 
   const handleSubmit = e => {
     e.preventDefault();
     console.log('sent');
   };
+
+  console.log(formValues);
 
   return (
     <form
@@ -62,9 +69,10 @@ export const ProductForm = () => {
         <InputLabel>Category</InputLabel>
         <Select
           label="Category"
-          value={category.id}
-          onChange={handleInputChange}
-          defaultValue=""
+          defaultValue={''}
+          value={category?.id}
+          name="category"
+          onChange={handleInputChangeNested}
         >
           {categories?.map(({ id, name }) => (
             <MenuItem key={id} value={id}>
@@ -79,31 +87,36 @@ export const ProductForm = () => {
         type="text"
         placeholder="TS29931"
         fullWidth
-        name="sku"
-        value={sku}
+        name="code"
+        value={code}
         onChange={handleInputChange}
       />
+
       <TextField
         label="Units"
         type="text"
         placeholder="units"
         fullWidth
-        name="units"
-        value={productMeasurements[0].unit}
-        onChange={handleInputChange}
+        defaultValue=""
+        name="productMeasurements"
+        value={productMeasurements[0]?.unit}
+        onChange={e => handleInputChangeArr(e, 'unit')}
       />
+
       <TextField
         label="Quantity"
-        type="text"
+        type="number"
         placeholder="3"
         fullWidth
-        name="quantity"
-        value={stockInquiries[0].quantity}
-        onChange={handleInputChange}
+        defaultValue=""
+        name="stockInquiries"
+        value={stockInquiries[0]?.quantity}
+        onChange={e => handleInputChangeArr(e, 'quantity')}
       />
+
       <TextField
         label="Price"
-        type="text"
+        type="number"
         placeholder="$21"
         fullWidth
         name="price"
@@ -116,6 +129,7 @@ export const ProductForm = () => {
         <Select
           label="Status"
           defaultValue=""
+          name="hasStock"
           value={hasStock}
           onChange={handleInputChange}
         >

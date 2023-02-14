@@ -1,58 +1,39 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 
-export const useForm = (initState = {}, formValidations = {}) => {
-  const [formValues, setFormValues] = useState(initState);
+export const useForm = initialState => {
+  const [values, setValues] = useState(initialState);
 
-  const [formValidation, setFormValidation] = useState({});
+  const reset = () => setValues(initialState);
 
-  const isFormValid = useMemo(() => {
-    for (const formValue of Object.keys(formValidation)) {
-      if (formValidation[formValue] !== null) return false;
-    }
+  const setFormValues = formValues => setValues(formValues);
 
-    return true;
-  }, [formValidation]);
-
-  useEffect(() => {
-    createValidators();
-  }, [formValues]);
-
-  const handleInputChange = ({ target }) => {
-    setFormValues({
-      ...formValues,
+  const handleInputChange = ({ target }) =>
+    setValues({
+      ...values,
       [target.name]: target.value,
+    });
+
+  const handleInputChangeNested = ({ target }) => {
+    setValues({
+      ...values,
+      [target.name]: { ...values[target.name], id: target.value },
     });
   };
 
-  const reset = () => setFormValues(initState);
-
-  const setFormValuesFx = formValues => {
-    setFormValues(formValues);
-  };
-
-  // Validations
-  const createValidators = () => {
-    const formCheckedValues = {};
-
-    for (const formField of Object.keys(formValidations)) {
-      const [fn, errorMessage] = formValidations[formField];
-
-      formCheckedValues[`${formField}Valid`] = fn(formValues[formField])
-        ? null
-        : errorMessage;
-    }
-
-    setFormValidation(formCheckedValues);
+  const handleInputChangeArr = ({ target }, key) => {
+    setValues({
+      ...values,
+      [target.name]: [{ ...values[target.name][0], [key]: target.value }],
+    });
   };
 
   return {
-    ...formValues,
-    formValues,
+    ...values,
+    formValues: values,
     handleInputChange,
     reset,
-    setFormValuesFx,
-
-    ...formValidation,
-    isFormValid,
+    setFormValues,
+    handleInputChangeNested,
+    handleInputChangeArr,
   };
 };
