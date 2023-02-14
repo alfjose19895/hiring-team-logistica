@@ -1,5 +1,5 @@
 from fastapi import Depends,HTTPException,status, APIRouter
-from controllers.category import create, update, delete
+from controllers.category import create, update, delete, get_categories
 import schemas.category as CategorySchema
 
 
@@ -27,3 +27,8 @@ async def category(id: int):
     return {"mensaje": "Registro Eliminado con Exito"}
   else:
     raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Registro no Actualizado")
+@router.get("/",status_code= status.HTTP_201_CREATED)
+async def category():
+  category= get_categories()
+  if category!=None:
+    return category

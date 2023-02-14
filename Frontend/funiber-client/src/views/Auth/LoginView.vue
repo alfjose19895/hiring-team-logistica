@@ -8,28 +8,37 @@
         <form @submit.prevent="doLogin">
           <label for="email">Email</label>
           <input type="text" id="email" v-model="email" placeholder="elon@musk.io" autocomplete="off">
-
           <label for="password">Password</label>&nbsp;
-          <i class="fas" :class="[passwordFieldIcon]" @click="hidePassword = !hidePassword"></i>
+          <font-awesome-icon :icon="['fas', passwordFieldIcon]" @click="handlePassword"/>
+          <i :class="passwordFieldIcon" v-on:click="handlePassword()" key="eyes"></i>
           <input :type="passwordFieldType" id="password" v-model="password" placeholder="**********">
-
-          <button type="submit">Log in</button>
+          <button type="submit" @click.prevent="doLogin()">Log in</button>
+          {{ this.msg }}
         </form>
       </div>
     </div>
 </template>
-
 <script setup>
-  import { computed, ref } from "vue";
+/* import specific icons */
+import { computed, ref,  onBeforeMount } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter(); //<-- router declared outside function: CORRECT
+const email = ref("");
+const hidePassword = ref(true);
+const password = ref("");
+const passwordFieldIcon = computed(() => hidePassword.value ? "fa-eye" : "fa-eye-slash");
+const passwordFieldType = computed(() => hidePassword.value ? "password" : "text");
 
-  const email = ref("");
-  const hidePassword = ref(true);
-  const password = ref("");
+const handlePassword =() =>{
+  hidePassword.value = !hidePassword.value;
 
-  const passwordFieldIcon = computed(() => hidePassword.value ? "fa-eye" : "fa-eye-slash");
-  const passwordFieldType = computed(() => hidePassword.value ? "password" : "text");
-
-  const doLogin = () => alert("Not implemented yet :O");
+  console.log("se ingreso");
+}
+const emit = defineEmits(['inFocus', 'submit'])
+const doLogin = () => {
+  //emit('handlelogin', true);
+  router.push({ name: "home" });
+};
 </script>
 
 <style>
@@ -47,8 +56,9 @@ body {
 }
 
 div#app {
-  width: 100%;
-  height: 100%;
+  width: 50%;
+  height: 50%;
+  display: block;
 }
 
 div#app div#login {

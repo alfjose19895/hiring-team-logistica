@@ -1,5 +1,5 @@
 from fastapi import Depends,HTTPException,status, APIRouter
-from controllers.product import create, update, delete,search_product_for_filter
+from controllers.product import create, update, delete,search_product_for_filter,search_products
 import schemas.product as product_schema
 
 
@@ -27,7 +27,11 @@ async def product(id: int):
   else:
     raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Registro no Actualizado")
 
-@router.get("/",status_code= status.HTTP_200_OK)
-async def products(filter: product_schema.ProductSearch):
+@router.get("/filter",status_code= status.HTTP_200_OK)
+async def product(filter: product_schema.ProductSearch):
   if filter!=None:
     return search_product_for_filter(filter)
+
+@router.get("/",status_code= status.HTTP_200_OK)
+async def product():
+  return search_products()

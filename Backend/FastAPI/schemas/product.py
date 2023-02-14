@@ -8,6 +8,7 @@ def product_schema_function(product)->dict:
     "name"        : product.name,
     "stock"       : product.stock,
     "category_id" : product.category_id.id,
+    "category"    : product.category_id,
     "created_at"  : product.created_at,
     "updated_at"  : product.updated_at,
     "state"       : product.state

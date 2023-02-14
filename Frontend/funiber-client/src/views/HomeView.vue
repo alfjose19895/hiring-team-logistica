@@ -1,10 +1,8 @@
 <script setup>
-//import TheWelcome from '../components/TheWelcome.vue'
+import { RouterLink, RouterView } from 'vue-router'
+import NavbarView from "../views/Layouts/NavbarView.vue";
 </script>
-
 <template>
-  <h1>Hola</h1>
-  <main>
-    <TheWelcome />
-  </main>
+  <NavbarView></NavbarView>
+ <RouterView></RouterView>
 </template>

@@ -14,6 +14,16 @@ def search_category_db(key: str, value)->CategorySchema.CategoryFull:
     category = None
   return category
 
+def get_categories()->CategorySchema.CategoryFull:
+  try:
+    category = CategoryModel.select()
+    print(category)
+    category =  CategorySchema.categories_schema_function(list(category))
+  except peewee.DoesNotExist:
+    category = None
+  return category
+
+
 def create(category: CategorySchema):
   try:
     if search_category_db("description",category.description) == None:
