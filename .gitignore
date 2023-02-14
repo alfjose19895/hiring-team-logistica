@@ -1,7 +1,8 @@
 .env
 .env.backup
-/.idea
-/.vscode
+.vscode
 app
 tmp
 backend/build
+.idea
+backend/.idea
