@@ -26,7 +26,30 @@ export const useAuthStore = () => {
 
       dispatch(onLogin(data.user));
     } catch (error) {
-      dispatch(onLogout([error.response.data.message]));
+      dispatch(onLogout(error.response.data.message));
+
+      setTimeout(() => {
+        dispatch(clearErrorMessage());
+      }, 1200);
+    }
+  };
+
+  const startRegister = async ({ fullName, email, password }) => {
+    dispatch(onChecking());
+    console.log({ fullName, email, password });
+
+    try {
+      const { data } = await inventoryManagementApi.post('/auth/register', {
+        fullName,
+        email,
+        password,
+      });
+
+      localStorage.setItem('token', data.jwt);
+      localStorage.setItem('token-init-date', new Date().getTime());
+      dispatch(onLogin(data.user));
+    } catch (error) {
+      dispatch(onLogout(error.response.data.message));
 
       setTimeout(() => {
         dispatch(clearErrorMessage());
@@ -51,5 +74,6 @@ export const useAuthStore = () => {
     // Methods
     startLogin,
     setErrorMessage,
+    startRegister,
   };
 };

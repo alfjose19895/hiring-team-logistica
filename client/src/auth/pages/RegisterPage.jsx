@@ -1,6 +1,27 @@
 import { Link } from 'react-router-dom';
+import { useAuthStore, useForm } from '../../hooks';
+import CustomAlert from '../../ui/alert/CustomAlert';
+
+const formFields = {
+  email: '',
+  password: '',
+  fullName: '',
+};
 
 const RegisterPage = () => {
+  const { startRegister, setErrorMessage, errorMessage } = useAuthStore();
+  const { email, password, fullName, handleInputChange, formValues, reset } =
+    useForm(formFields);
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    if (Object.values(formValues).some(field => !field))
+      return setErrorMessage(['All fields are required']);
+
+    await startRegister(formValues);
+    reset();
+  };
+
   return (
     <section className="mt-12">
       <div className="relative z-0 flex flex-col min-w-0 break-words border-0 my-10 bg-white shadow rounded-xl p-10">
@@ -86,12 +107,17 @@ const RegisterPage = () => {
         </div>
 
         <div className="flex-auto p-6">
-          <form role="form text-left">
+          <form role="form text-left" onSubmit={handleSubmit}>
+            {errorMessage && <CustomAlert />}
+
             <div className="mb-4">
               <input
                 type="text"
                 className="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-slate-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
                 placeholder="Name"
+                name="fullName"
+                value={fullName}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mb-4">
@@ -99,6 +125,9 @@ const RegisterPage = () => {
                 type="email"
                 className="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-slate-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
                 placeholder="Email"
+                name="email"
+                value={email}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mb-4">
@@ -106,6 +135,9 @@ const RegisterPage = () => {
                 type="password"
                 className="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-slate-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
                 placeholder="Password"
+                name="password"
+                value={password}
+                onChange={handleInputChange}
               />
             </div>
 

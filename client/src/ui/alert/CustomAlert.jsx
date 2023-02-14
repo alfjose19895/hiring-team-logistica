@@ -9,12 +9,11 @@ const CustomAlert = () => {
 
   return (
     <Stack sx={{ width: '100%' }} spacing={2} className="mb-5">
-      {errorMessage?.length > 0 &&
-        errorMessage?.map((err, i) => (
-          <Alert key={i} severity="error">
-            {err}
-          </Alert>
-        ))}
+      {errorMessage?.map((err, i) => (
+        <Alert key={i} severity="error">
+          {err}
+        </Alert>
+      ))}
     </Stack>
   );
 };

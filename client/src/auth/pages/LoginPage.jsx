@@ -8,7 +8,7 @@ const formFields = {
 };
 
 const LoginPage = () => {
-  const { startLogin, setErrorMessage } = useAuthStore();
+  const { startLogin, setErrorMessage, errorMessage } = useAuthStore();
   const { email, password, handleInputChange, formValues, reset } =
     useForm(formFields);
 
@@ -33,7 +33,7 @@ const LoginPage = () => {
         </div>
 
         <div className="flex-auto p-6">
-          {true && <CustomAlert />}
+          {errorMessage && <CustomAlert />}
 
           <form role="form" onSubmit={hanldeLogin}>
             <label
