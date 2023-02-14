@@ -8,7 +8,7 @@ import { CategoryResponse } from '../interfaces/categoryResponse';
   providedIn: 'root',
 })
 export class CategoriesService {
-  API_URL = 'http://127.0.0.1:8000/api';
+  API_URL = 'http://localhost:80/api';
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
