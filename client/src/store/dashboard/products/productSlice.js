@@ -31,6 +31,14 @@ export const productSlice = createSlice({
         product.id === payload.id ? payload : product
       );
     },
+    onDeleteProduct: state => {
+      if (state.activeProduct) {
+        state.products.products = state.products.products.filter(
+          event => event.id !== state.activeProduct.id
+        );
+        state.activeProduct = null;
+      }
+    },
   },
 });
 
@@ -41,4 +49,5 @@ export const {
   onSetActiveProduct,
   onAddNewProduct,
   onUpdateProduct,
+  onDeleteProduct,
 } = productSlice.actions;

@@ -21,7 +21,7 @@ const CustomModal = ({ children }) => {
 
   const handleClose = () => {
     closeModal();
-    setActiveProduct({});
+    setActiveProduct(null);
   };
 
   return (

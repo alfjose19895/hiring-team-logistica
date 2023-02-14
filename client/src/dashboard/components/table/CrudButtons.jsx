@@ -8,15 +8,18 @@ import { useProductStore } from '../../hooks';
 
 const CrudButtons = ({ row }) => {
   const { openModal } = useUiStore();
-  const { setActiveProduct } = useProductStore();
+  const { setActiveProduct, startDeletingProduct } = useProductStore();
 
   const handleEdit = product => {
     openModal();
     setActiveProduct(product);
   };
 
-  const handleDelete = product => {
-    console.log(product);
+  const handleDelete = async product => {
+    setActiveProduct(product);
+
+    alert('Are you shure?');
+    await startDeletingProduct(product.id);
   };
 
   return (

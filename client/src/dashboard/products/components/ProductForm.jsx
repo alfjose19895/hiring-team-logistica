@@ -21,7 +21,8 @@ const productFormFields = {
 };
 
 export const ProductForm = () => {
-  const { categories, activeProduct, startSavingProduct } = useProductStore();
+  const { categories, activeProduct, startSavingProduct, setActiveProduct } =
+    useProductStore();
   const { closeModal } = useUiStore();
   const {
     formValues,
@@ -50,6 +51,7 @@ export const ProductForm = () => {
     await startSavingProduct(formValues);
 
     closeModal();
+    setActiveProduct(null);
   };
 
   return (
@@ -126,19 +128,21 @@ export const ProductForm = () => {
         onChange={handleInputChange}
       />
 
-      <FormControl>
-        <InputLabel>Status</InputLabel>
-        <Select
-          label="Status"
-          defaultValue=""
-          name="hasStock"
-          value={hasStock}
-          onChange={handleInputChange}
-        >
-          <MenuItem value={true}>Active</MenuItem>
-          <MenuItem value={false}>Out Of Stock</MenuItem>
-        </Select>
-      </FormControl>
+      {activeProduct?.id && (
+        <FormControl>
+          <InputLabel>Status</InputLabel>
+          <Select
+            label="Status"
+            defaultValue=""
+            name="hasStock"
+            value={hasStock}
+            onChange={handleInputChange}
+          >
+            <MenuItem value={true}>Active</MenuItem>
+            <MenuItem value={false}>Out Of Stock</MenuItem>
+          </Select>
+        </FormControl>
+      )}
 
       <Button variant="contained" type="submit">
         {activeProduct?.id ? 'Update' : 'Create'}

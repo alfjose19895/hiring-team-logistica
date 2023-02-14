@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { inventoryManagementApi } from '../../api';
 import {
   onAddNewProduct,
+  onDeleteProduct,
   onLoadCategories,
   onLoadProducts,
   onSetActiveProduct,
@@ -31,6 +32,10 @@ export const useProductStore = () => {
     dispatch(onLoadCategories(data));
   };
 
+  const setActiveProduct = product => {
+    dispatch(onSetActiveProduct(product));
+  };
+
   const startSavingProduct = async product => {
     try {
       // updating
@@ -58,8 +63,15 @@ export const useProductStore = () => {
     }
   };
 
-  const setActiveProduct = product => {
-    dispatch(onSetActiveProduct(product));
+  const startDeletingProduct = async id => {
+    try {
+      await inventoryManagementApi.delete(`/products/${id}`);
+
+      dispatch(onDeleteProduct());
+    } catch (error) {
+      console.log(error);
+      console.log(error?.response?.data);
+    }
   };
 
   return {
@@ -71,5 +83,6 @@ export const useProductStore = () => {
     startLoadingCategories,
     setActiveProduct,
     startSavingProduct,
+    startDeletingProduct,
   };
 };
