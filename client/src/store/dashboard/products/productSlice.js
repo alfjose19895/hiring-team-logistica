@@ -5,6 +5,7 @@ export const productSlice = createSlice({
   initialState: {
     activeProduct: null,
     isLoadingProducts: true,
+    isLoadingCategories: true,
     products: [],
     categories: [],
   },
@@ -17,6 +18,7 @@ export const productSlice = createSlice({
 
     onLoadCategories: (state, { payload = [] }) => {
       state.categories = payload;
+      state.isLoadingCategories = false;
     },
 
     onSetActiveProduct: (state, { payload }) => {
@@ -43,6 +45,7 @@ export const productSlice = createSlice({
     onLogoutProducts: state => {
       state.activeProduct = null;
       state.isLoadingProducts = true;
+      state.isLoadingCategories = true;
       state.products = [];
       state.categories = [];
     },

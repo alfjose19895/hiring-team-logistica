@@ -1,9 +1,8 @@
 import MaterialReactTable from 'material-react-table';
 import { useMemo } from 'react';
 import { AddNewBtn } from './AddNewBtn';
-import { columnsStructure } from './colums';
 
-export const Table = ({ data, titleBtn }) => {
+export const Table = ({ data, titleBtn , columnsStructure}) => {
   const columns = useMemo(() => columnsStructure, []);
 
   return (

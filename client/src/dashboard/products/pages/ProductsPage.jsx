@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { CustomModal } from '../../../ui/components/modal';
 import { LoaderSpinner } from '../../../ui/loaders';
-import { Table } from '../../components/table';
+import { columnsStructureProducts, Table } from '../../components/table';
 import { useProductStore } from '../../hooks';
 import { ProductForm } from '../components';
 
@@ -25,7 +25,11 @@ const ProductsPage = () => {
 
       <div className="pt-7">
         {!isLoadingProducts ? (
-          <Table data={products.products} titleBtn={'Create New Product'} />
+          <Table
+            data={products.products}
+            titleBtn={'Create New Product'}
+            columnsStructure={columnsStructureProducts}
+          />
         ) : (
           <LoaderSpinner />
         )}

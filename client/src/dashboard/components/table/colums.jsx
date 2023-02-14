@@ -1,6 +1,6 @@
 import CrudButtons from './CrudButtons';
 
-export const columnsStructure = [
+export const columnsStructureProducts = [
   {
     accessorKey: 'null',
     header: 'Actions',
@@ -67,5 +67,18 @@ export const columnsStructure = [
         </span>
       );
     },
+  },
+];
+
+export const columnsStructureCategories = [
+  {
+    accessorKey: 'null',
+    header: 'Actions',
+    enableSorting: false,
+    Cell: ({ row }) => <CrudButtons row={row} />,
+  },
+  {
+    accessorKey: 'name',
+    header: 'Product Name',
   },
 ];
