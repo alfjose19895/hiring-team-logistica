@@ -4,6 +4,7 @@ export const productSlice = createSlice({
   name: 'product',
   initialState: {
     activeProduct: null,
+    activeCategory: null,
     isLoadingProducts: true,
     isLoadingCategories: true,
     products: [],
@@ -15,12 +16,6 @@ export const productSlice = createSlice({
       state.products = payload;
       state.isLoadingProducts = false;
     },
-
-    onLoadCategories: (state, { payload = [] }) => {
-      state.categories = payload;
-      state.isLoadingCategories = false;
-    },
-
     onSetActiveProduct: (state, { payload }) => {
       state.activeProduct = payload;
     },
@@ -42,8 +37,17 @@ export const productSlice = createSlice({
       }
     },
 
+    onLoadCategories: (state, { payload = [] }) => {
+      state.categories = payload;
+      state.isLoadingCategories = false;
+    },
+    onSetActiveCategory: (state, { payload }) => {
+      state.activeCategory = payload;
+    },
+
     onLogoutProducts: state => {
       state.activeProduct = null;
+      state.activeCategory = null;
       state.isLoadingProducts = true;
       state.isLoadingCategories = true;
       state.products = [];
@@ -54,11 +58,13 @@ export const productSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
-  onLoadProducts,
-  onLoadCategories,
-  onSetActiveProduct,
   onAddNewProduct,
-  onUpdateProduct,
   onDeleteProduct,
+  onLoadProducts,
   onLogoutProducts,
+  onSetActiveProduct,
+  onUpdateProduct,
+  
+  onLoadCategories,
+  onSetActiveCategory,
 } = productSlice.actions;

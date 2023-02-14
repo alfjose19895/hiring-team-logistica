@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
+
 import { CustomModal } from '../../../ui/components/modal';
 import { LoaderSpinner } from '../../../ui/loaders';
 import { useProductStore } from '../../hooks';
-import { ProductForm } from '../../products/components';
+import { CategoryForm } from '../components';
+
 import { columnsStructureCategories, Table } from './../../components/table';
 
 const CategoriesPage = () => {
@@ -32,7 +34,7 @@ const CategoriesPage = () => {
       </div>
 
       <CustomModal>
-        <ProductForm />
+        <CategoryForm />
       </CustomModal>
     </>
   );

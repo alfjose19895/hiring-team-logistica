@@ -16,12 +16,13 @@ const style = {
 };
 
 const CustomModal = ({ children }) => {
-  const { setActiveProduct } = useProductStore();
+  const { setActiveProduct, setActiveCategory } = useProductStore();
   const { isModalOpen, closeModal } = useUiStore();
 
   const handleClose = () => {
     closeModal();
     setActiveProduct(null);
+    setActiveCategory(null);
   };
 
   return (

@@ -5,6 +5,7 @@ import {
   onDeleteProduct,
   onLoadCategories,
   onLoadProducts,
+  onSetActiveCategory,
   onSetActiveProduct,
   onUpdateProduct,
 } from '../../store/dashboard';
@@ -16,6 +17,7 @@ export const useProductStore = () => {
     products,
     categories,
     activeProduct,
+    activeCategory,
     isLoadingProducts,
     isLoadingCategories,
   } = useSelector(state => state.products);
@@ -42,6 +44,10 @@ export const useProductStore = () => {
 
   const setActiveProduct = product => {
     dispatch(onSetActiveProduct(product));
+  };
+
+  const setActiveCategory = category => {
+    dispatch(onSetActiveCategory(category));
   };
 
   const startSavingProduct = async product => {
@@ -94,5 +100,8 @@ export const useProductStore = () => {
     setActiveProduct,
     startSavingProduct,
     startDeletingProduct,
+
+    activeCategory,
+    setActiveCategory,
   };
 };

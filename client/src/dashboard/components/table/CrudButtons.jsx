@@ -11,22 +11,30 @@ const dictionary = {
     setActive: (cb, product) => cb(product),
     delete: (cb, id) => cb(id),
   },
-  category: '',
+  category: {
+    setActive: (cb, product) => cb(product),
+    delete: (cb, id) => cb(id),
+  },
 };
 
 const CrudButtons = ({ row, tag }) => {
   const { openModal } = useUiStore();
-  const { setActiveProduct, startDeletingProduct } = useProductStore();
+  const { setActiveProduct, startDeletingProduct, setActiveCategory } =
+    useProductStore();
 
   const handleEdit = original => {
     openModal();
-    dictionary[tag]['setActive'](setActiveProduct, original);
+    (tag === 'product' &&
+      dictionary[tag]['setActive'](setActiveProduct, original)) ||
+      dictionary[tag]['setActive'](setActiveCategory, original);
   };
 
   const handleDelete = async original => {
     setActiveProduct(original);
 
-    confirm('Are you shure?') &&
+    (confirm('Are you shure?') &&
+      tag === 'product' &&
+      (await dictionary[tag]['delete'](startDeletingProduct, original.id))) ||
       (await dictionary[tag]['delete'](startDeletingProduct, original.id));
   };
 

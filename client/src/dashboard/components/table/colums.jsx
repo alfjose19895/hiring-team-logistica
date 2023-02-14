@@ -76,7 +76,7 @@ export const columnsStructureCategories = [
     accessorKey: 'null',
     header: 'Actions',
     enableSorting: false,
-    Cell: ({ row }) => <CrudButtons row={row} tag={''} />,
+    Cell: ({ row }) => <CrudButtons row={row} tag={'category'} />,
   },
   {
     accessorKey: 'name',
