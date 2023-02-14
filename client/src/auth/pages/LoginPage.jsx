@@ -1,6 +1,23 @@
 import { Link } from 'react-router-dom';
+import { useAuthStore, useForm } from '../../hooks';
+
+const formFields = {
+  email: 'alex@test.com',
+  password: '123123qweQWE',
+};
 
 const LoginPage = () => {
+  const { startLogin } = useAuthStore();
+  const { email, password, handleInputChange, formValues } =
+    useForm(formFields);
+
+  const hanldeLogin = async e => {
+    e.preventDefault();
+    if (Object.values(formValues).some(field => !field)) return;
+    
+    await startLogin({ email, password });
+  };
+
   return (
     <section className="mt-20">
       <dir className="border-0 my-10 bg-white shadow rounded-xl p-10">
@@ -12,7 +29,7 @@ const LoginPage = () => {
         </div>
 
         <div className="flex-auto p-6">
-          <form role="form">
+          <form role="form" onSubmit={hanldeLogin}>
             <label
               className="mb-2 ml-1 font-bold text-xs text-slate-700"
               htmlFor="email"
@@ -26,6 +43,8 @@ const LoginPage = () => {
                 placeholder="Email"
                 id="email"
                 name="email"
+                value={email}
+                onChange={handleInputChange}
               />
             </div>
             <label
@@ -41,6 +60,8 @@ const LoginPage = () => {
                 placeholder="Password"
                 id="pass"
                 name="pass"
+                value={password}
+                onChange={handleInputChange}
               />
             </div>
 
