@@ -21,7 +21,7 @@ type DefaultModel struct {
 	DeletedAt *time.Time `sql:"index" json:"deleted_at"`
 }
 
-// SetupDatabase is a function that will setup the database connection. It will also set the maximum number of connections
+// SetupDatabase is a function that will set up the database connection. It will also set the maximum number of connections
 func SetupDatabase() error {
 	var err error
 	var config gorm.Config
