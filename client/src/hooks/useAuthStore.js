@@ -57,6 +57,24 @@ export const useAuthStore = () => {
     }
   };
 
+  const checkAuthToken = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return dispatch(onLogout());
+
+    try {
+      const { data } = await inventoryManagementApi.get('/auth/renew-token');
+      localStorage.setItem('token', data.jwt);
+      localStorage.setItem('token-init-date', new Date().getTime());
+
+      dispatch(onLogin(data.user));
+    } catch (error) {
+      console.log(error.response.data);
+      dispatch(onLogout(error.response.data.message));
+      localStorage.clear();
+      dispatch(onLogout());
+    }
+  };
+
   const setErrorMessage = payload => {
     dispatch(onSetErrorMessage(payload));
 
@@ -75,5 +93,6 @@ export const useAuthStore = () => {
     startLogin,
     setErrorMessage,
     startRegister,
+    checkAuthToken,
   };
 };
