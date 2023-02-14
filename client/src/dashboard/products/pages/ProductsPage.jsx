@@ -15,19 +15,19 @@ const ProductsPage = () => {
   }, []);
 
   return (
-    <>
+    <div className="mt-1 px-6">
       <h1 className="text-4xl font-black">Products</h1>
 
-      <div className="mt-16 p-9">
+      <div className="pt-7">
         {products?.products?.length > 0 && (
-          <Table data={products.products} titleBtn={'Create New Account'} />
+          <Table data={products.products} titleBtn={'Create New Product'} />
         )}
       </div>
 
       <CustomModal>
         <ProductForm />
       </CustomModal>
-    </>
+    </div>
   );
 };
 

@@ -1,10 +1,11 @@
 import { Outlet } from 'react-router-dom';
+import { Header } from '../dashboard/components/navbar/Header';
 import Sidebar from '../dashboard/components/sidebar/Sidebar';
 
 const PrivateLayout = () => {
   return (
     <div className="bg-gray-100">
-      {/* <Header /> */}
+      <Header />
 
       <div className="md:flex md:min-h-screen">
         <Sidebar />

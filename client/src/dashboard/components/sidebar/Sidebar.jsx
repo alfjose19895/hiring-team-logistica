@@ -14,16 +14,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <aside className="">
-        <div className="">
-          <span className="block px-8 py-6 m-0 text-sm whitespace-nowrap text-slate-700">
-            <span className="ml-1 font-semibold transition-all duration-200 ease-nav-brand">
-              Some Dashboard
-            </span>
-          </span>
-        </div>
-        <hr className="h-px mt-0 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent" />
-
+      <aside className="mt-3">
         <div className="items-center block w-auto max-h-screen overflow-auto h-sidenav grow basis-full mt-6">
           <ul className="flex flex-col pl-0 mb-0">
             {items.map(item => (

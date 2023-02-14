@@ -26,6 +26,7 @@ export const columnsStructure = [
       cell
         .getValue()
         .map(({ unit }) => <span key={Math.random()}>{unit}</span>),
+    enableSorting: false,
   },
   {
     accessorKey: 'stockInquiries',
@@ -34,6 +35,7 @@ export const columnsStructure = [
       cell
         .getValue()
         .map(({ quantity }) => <span key={Math.random()}>{quantity}</span>),
+    enableSorting: false,
   },
   {
     accessorKey: 'price',

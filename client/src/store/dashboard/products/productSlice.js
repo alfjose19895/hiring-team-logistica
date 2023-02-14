@@ -39,6 +39,13 @@ export const productSlice = createSlice({
         state.activeProduct = null;
       }
     },
+
+    onLogoutProducts: state => {
+      state.activeProduct = null;
+      state.isLoadingProducts = false;
+      state.products = [];
+      state.categories = [];
+    },
   },
 });
 
@@ -50,4 +57,5 @@ export const {
   onAddNewProduct,
   onUpdateProduct,
   onDeleteProduct,
+  onLogoutProducts,
 } = productSlice.actions;

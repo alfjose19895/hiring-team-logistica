@@ -5,6 +5,7 @@ import {
   onChecking,
   onLogin,
   onLogout,
+  onLogoutProducts,
   onSetErrorMessage,
 } from '../store';
 
@@ -75,6 +76,12 @@ export const useAuthStore = () => {
     }
   };
 
+  const startLogout = () => {
+    localStorage.clear();
+    dispatch(onLogoutProducts());
+    dispatch(onLogout());
+  };
+
   const setErrorMessage = payload => {
     dispatch(onSetErrorMessage(payload));
 
@@ -94,5 +101,6 @@ export const useAuthStore = () => {
     setErrorMessage,
     startRegister,
     checkAuthToken,
+    startLogout,
   };
 };
