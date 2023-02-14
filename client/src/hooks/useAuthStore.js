@@ -1,6 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { inventoryManagementApi } from '../api';
-import { clearErrorMessage, onChecking, onLogin, onLogout } from '../store';
+import {
+  clearErrorMessage,
+  onChecking,
+  onLogin,
+  onLogout,
+  onSetErrorMessage,
+} from '../store';
 
 export const useAuthStore = () => {
   const dispatch = useDispatch();
@@ -20,12 +26,20 @@ export const useAuthStore = () => {
 
       dispatch(onLogin(data.user));
     } catch (error) {
-      dispatch(onLogout(error.response.data.msg));
+      dispatch(onLogout([error.response.data.message]));
 
       setTimeout(() => {
         dispatch(clearErrorMessage());
-      }, 180);
+      }, 1200);
     }
+  };
+
+  const setErrorMessage = payload => {
+    dispatch(onSetErrorMessage(payload));
+
+    setTimeout(() => {
+      dispatch(clearErrorMessage());
+    }, 1200);
   };
 
   return {
@@ -36,5 +50,6 @@ export const useAuthStore = () => {
 
     // Methods
     startLogin,
+    setErrorMessage,
   };
 };

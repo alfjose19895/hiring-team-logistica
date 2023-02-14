@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuthStore, useForm } from '../../hooks';
+import CustomAlert from '../../ui/alert/CustomAlert';
 
 const formFields = {
   email: 'alex@test.com',
@@ -7,15 +8,18 @@ const formFields = {
 };
 
 const LoginPage = () => {
-  const { startLogin } = useAuthStore();
-  const { email, password, handleInputChange, formValues } =
+  const { startLogin, setErrorMessage } = useAuthStore();
+  const { email, password, handleInputChange, formValues, reset } =
     useForm(formFields);
 
   const hanldeLogin = async e => {
     e.preventDefault();
-    if (Object.values(formValues).some(field => !field)) return;
-    
+    if (Object.values(formValues).some(field => !field))
+      return setErrorMessage(['All fields are required']);
+
     await startLogin({ email, password });
+
+    reset();
   };
 
   return (
@@ -29,6 +33,8 @@ const LoginPage = () => {
         </div>
 
         <div className="flex-auto p-6">
+          {true && <CustomAlert />}
+
           <form role="form" onSubmit={hanldeLogin}>
             <label
               className="mb-2 ml-1 font-bold text-xs text-slate-700"
