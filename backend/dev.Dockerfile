@@ -1,7 +1,7 @@
 FROM golang:alpine
 
 RUN apk upgrade && apk upgrade && \
-    apk add --no-cache git make openssh-app curl
+    apk add --no-cache git make openssh-client curl
 
 WORKDIR /app
 COPY . .
