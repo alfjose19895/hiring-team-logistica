@@ -1,13 +1,18 @@
 import { useEffect } from 'react';
 
+import { CustomModal } from '../../../ui/components/modal';
+import { LoaderSpinner } from '../../../ui/loaders';
 import { Table } from '../../components/table';
 import { useProductStore } from '../../hooks';
 import { ProductForm } from '../components';
-import { CustomModal } from '../../../ui/components/modal';
 
 const ProductsPage = () => {
-  const { startLoadingProducts, products, startLoadingCategories } =
-    useProductStore();
+  const {
+    startLoadingProducts,
+    products,
+    startLoadingCategories,
+    isLoadingProducts,
+  } = useProductStore();
 
   useEffect(() => {
     startLoadingProducts();
@@ -15,19 +20,21 @@ const ProductsPage = () => {
   }, []);
 
   return (
-    <div className="mt-1 px-6">
+    <>
       <h1 className="text-4xl font-black">Products</h1>
 
       <div className="pt-7">
-        {products?.products?.length > 0 && (
+        {!isLoadingProducts ? (
           <Table data={products.products} titleBtn={'Create New Product'} />
+        ) : (
+          <LoaderSpinner />
         )}
       </div>
 
       <CustomModal>
         <ProductForm />
       </CustomModal>
-    </div>
+    </>
   );
 };
 

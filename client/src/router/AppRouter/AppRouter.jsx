@@ -7,6 +7,7 @@ import { LoginPage, RegisterPage } from '../../auth/pages';
 import { ProductsPage } from '../../dashboard/products';
 import { UsersPage } from '../../dashboard/users';
 import { useAuthStore } from '../../hooks';
+import { LoaderSpinner } from '../../ui/loaders';
 
 const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
@@ -15,7 +16,7 @@ const AppRouter = () => {
     checkAuthToken();
   }, []);
 
-  if (status === 'checking') return <h3>Loading...</h3>;
+  if (status === 'checking') return <LoaderSpinner />;
 
   return (
     <BrowserRouter>

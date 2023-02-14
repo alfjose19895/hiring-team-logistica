@@ -18,8 +18,7 @@ const CrudButtons = ({ row }) => {
   const handleDelete = async product => {
     setActiveProduct(product);
 
-    alert('Are you shure?');
-    await startDeletingProduct(product.id);
+    confirm('Are you shure?') && (await startDeletingProduct(product.id));
   };
 
   return (

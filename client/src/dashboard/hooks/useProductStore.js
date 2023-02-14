@@ -12,9 +12,8 @@ import { parseCreateProduct, parseUpdateProduct } from '../products/helpers';
 
 export const useProductStore = () => {
   const dispatch = useDispatch();
-  const { products, categories, activeProduct } = useSelector(
-    state => state.products
-  );
+  const { products, categories, activeProduct, isLoadingProducts } =
+    useSelector(state => state.products);
 
   const startLoadingProducts = async () => {
     try {
@@ -75,6 +74,7 @@ export const useProductStore = () => {
   };
 
   return {
+    isLoadingProducts,
     products,
     categories,
     activeProduct,

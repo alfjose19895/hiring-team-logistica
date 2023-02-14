@@ -9,7 +9,7 @@ const PrivateLayout = () => {
 
       <div className="md:flex md:min-h-screen">
         <Sidebar />
-        <main className="p-10 flex-1 ">
+        <main className="px-16 pt-11 py-9 flex-1 ">
           <Outlet />
         </main>
       </div>

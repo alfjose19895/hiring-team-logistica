@@ -23,7 +23,7 @@ export const Header = () => {
             className="text-white text-sm p-3 rounded-md bg-slate-700 uppercase font-bold"
             onClick={handleLogout}
           >
-            Cerrar Sesión
+            Log Out
           </button>
         </div>
       </div>

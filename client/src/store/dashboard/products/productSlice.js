@@ -11,8 +11,8 @@ export const productSlice = createSlice({
 
   reducers: {
     onLoadProducts: (state, { payload = [] }) => {
-      state.isLoadingProducts = false;
       state.products = payload;
+      state.isLoadingProducts = false;
     },
 
     onLoadCategories: (state, { payload = [] }) => {
@@ -42,7 +42,7 @@ export const productSlice = createSlice({
 
     onLogoutProducts: state => {
       state.activeProduct = null;
-      state.isLoadingProducts = false;
+      state.isLoadingProducts = true;
       state.products = [];
       state.categories = [];
     },
