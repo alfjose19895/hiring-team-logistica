@@ -5,9 +5,9 @@ import { AuthPublicLayout, PrivateLayout } from '../../layouts';
 
 import { LoginPage, RegisterPage } from '../../auth/pages';
 import { ProductsPage } from '../../dashboard/products';
-import { UsersPage } from '../../dashboard/users';
 import { useAuthStore } from '../../hooks';
 import { LoaderSpinner } from '../../ui/loaders';
+import { CategoriesPage } from '../../dashboard/categories';
 
 const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
@@ -35,7 +35,7 @@ const AppRouter = () => {
             <Route path="/dashboard" element={<PrivateLayout />}>
               <Route index element={<ProductsPage />} />
               <Route path="products" element={<ProductsPage />} />
-              <Route path="users" element={<UsersPage />} />
+              <Route path="categories" element={<CategoriesPage />} />
 
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Route>
