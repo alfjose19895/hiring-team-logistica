@@ -7,21 +7,22 @@ import {
   TextField,
 } from '@mui/material';
 import React, { useEffect } from 'react';
-import { useForm } from '../../../hooks';
+import { useForm, useUiStore } from '../../../hooks';
 import { useProductStore } from '../../hooks';
 
 const productFormFields = {
   title: '',
   code: '',
-  price: 0,
+  price: '',
   hasStock: true,
   category: { id: '', name: '' },
   productMeasurements: [{ id: '', unit: '' }],
-  stockInquiries: [{ id: '', unit: '' }],
+  stockInquiries: [{ id: '', quantity: '' }],
 };
 
 export const ProductForm = () => {
-  const { categories, activeProduct } = useProductStore();
+  const { categories, activeProduct, startSavingProduct } = useProductStore();
+  const { closeModal } = useUiStore();
   const {
     formValues,
     handleInputChange,
@@ -40,15 +41,16 @@ export const ProductForm = () => {
   } = formValues;
 
   useEffect(() => {
-    if (activeProduct.id) setFormValues({ ...activeProduct });
+    if (activeProduct?.id) setFormValues({ ...activeProduct });
   }, [activeProduct]);
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    console.log('sent');
-  };
 
-  console.log(formValues);
+    await startSavingProduct(formValues);
+
+    closeModal();
+  };
 
   return (
     <form
@@ -139,7 +141,7 @@ export const ProductForm = () => {
       </FormControl>
 
       <Button variant="contained" type="submit">
-        Update
+        {activeProduct?.id ? 'Update' : 'Create'}
       </Button>
     </form>
   );

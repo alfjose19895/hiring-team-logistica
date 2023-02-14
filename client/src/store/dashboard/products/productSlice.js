@@ -22,9 +22,17 @@ export const productSlice = createSlice({
     onSetActiveProduct: (state, { payload }) => {
       state.activeProduct = payload;
     },
+
+    onAddNewProduct: (state, { payload }) => {
+      state.products.products.unshift(payload);
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { onLoadProducts, onLoadCategories, onSetActiveProduct } =
-  productSlice.actions;
+export const {
+  onLoadProducts,
+  onLoadCategories,
+  onSetActiveProduct,
+  onAddNewProduct,
+} = productSlice.actions;

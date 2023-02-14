@@ -19,7 +19,9 @@ const ProductsPage = () => {
       <h1 className="text-4xl font-black">Products</h1>
 
       <div className="mt-16 p-9">
-        {products?.products?.length > 0 && <Table data={products.products} />}
+        {products?.products?.length > 0 && (
+          <Table data={products.products} titleBtn={'Create New Account'} />
+        )}
       </div>
 
       <CustomModal>
