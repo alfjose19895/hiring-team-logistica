@@ -6,19 +6,28 @@ import { Box, IconButton, Tooltip } from '@mui/material';
 import { useUiStore } from '../../../hooks/useUiStore';
 import { useProductStore } from '../../hooks';
 
-const CrudButtons = ({ row }) => {
+const dictionary = {
+  product: {
+    setActive: (cb, product) => cb(product),
+    delete: (cb, id) => cb(id),
+  },
+  category: '',
+};
+
+const CrudButtons = ({ row, tag }) => {
   const { openModal } = useUiStore();
   const { setActiveProduct, startDeletingProduct } = useProductStore();
 
-  const handleEdit = product => {
+  const handleEdit = original => {
     openModal();
-    setActiveProduct(product);
+    dictionary[tag]['setActive'](setActiveProduct, original);
   };
 
-  const handleDelete = async product => {
-    setActiveProduct(product);
+  const handleDelete = async original => {
+    setActiveProduct(original);
 
-    confirm('Are you shure?') && (await startDeletingProduct(product.id));
+    confirm('Are you shure?') &&
+      (await dictionary[tag]['delete'](startDeletingProduct, original.id));
   };
 
   return (

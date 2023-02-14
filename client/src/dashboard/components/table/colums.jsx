@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import CrudButtons from './CrudButtons';
 
 export const columnsStructureProducts = [
@@ -5,7 +6,7 @@ export const columnsStructureProducts = [
     accessorKey: 'null',
     header: 'Actions',
     enableSorting: false,
-    Cell: ({ row }) => <CrudButtons row={row} />,
+    Cell: ({ row }) => <CrudButtons row={row} tag="product" />,
   },
   {
     accessorKey: 'title',
@@ -75,10 +76,23 @@ export const columnsStructureCategories = [
     accessorKey: 'null',
     header: 'Actions',
     enableSorting: false,
-    Cell: ({ row }) => <CrudButtons row={row} />,
+    Cell: ({ row }) => <CrudButtons row={row} tag={''} />,
   },
   {
     accessorKey: 'name',
     header: 'Product Name',
+  },
+  {
+    accessorKey: 'z',
+    header: 'Actions',
+    enableSorting: false,
+    Cell: ({ row }) => (
+      <Button
+        variant="contained"
+        style={{ backgroundColor: '#3E92CC', fontWeight: 'bold' }}
+      >
+        View Products
+      </Button>
+    ),
   },
 ];

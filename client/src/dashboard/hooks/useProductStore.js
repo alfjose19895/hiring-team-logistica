@@ -31,9 +31,13 @@ export const useProductStore = () => {
   };
 
   const startLoadingCategories = async () => {
-    const { data } = await inventoryManagementApi.get('/categories');
+    try {
+      const { data } = await inventoryManagementApi.get('/categories');
 
-    dispatch(onLoadCategories(data));
+      dispatch(onLoadCategories(data));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const setActiveProduct = product => {
