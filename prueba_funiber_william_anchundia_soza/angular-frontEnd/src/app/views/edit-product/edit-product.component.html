@@ -1,0 +1,29 @@
+<app-header></app-header>
+
+<div class="container">
+    <h3>Edit Product</h3>
+    <form [formGroup]="editProductForm" (ngSubmit)="onEditProduct(editProductForm.value)">
+        <div class="row">
+          <div class="col">            
+            <input type="text" class="form-control" placeholder="code product" formControlName="codeProduct">
+          </div>
+          <div class="col">
+            <input type="text" class="form-control" placeholder="Name product" formControlName="nameProduct">
+          </div>
+        </div><br>
+        <div class="row">
+            <div class="col">            
+              <input type="text" class="form-control" placeholder="id category" formControlName="idCategoryProduct">
+            </div>
+            <div class="col">
+              <input type="hidden" class="form-control" placeholder="hasStock" formControlName="hasStock">              
+            </div>
+          </div><br>
+          <div class="row">
+            <div class="col">
+              <input type="submit" class="form-control btn btn-primary" value="Edit Product" >
+            </div>
+          </div>      
+      </form>
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,16 @@
+<app-header></app-header>
+<div class="container">
+    <h3>Edit Category Products</h3>
+    <form [formGroup]="editCategoryProductForm" (ngSubmit)="onEditCategoryProduct(editCategoryProductForm.value)">
+        <div class="row">
+          <div class="col">
+            <input type="hidden" class="form-control" formControlName="idCategoryProduct"[readonly]="true">
+            <input type="text" class="form-control" placeholder="Name category" formControlName="nameCategoryProduct">
+          </div>
+          <div class="col">
+            <input type="submit" class="form-control btn btn-primary" value="Edit Category" >
+          </div>
+        </div>
+      </form>
+</div>
+<app-footer></app-footer>

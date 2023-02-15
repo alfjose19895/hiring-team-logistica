@@ -1,0 +1,20 @@
+<app-header></app-header>
+<div class="container">
+    <h3>Search Product</h3>
+    <form action="">
+        <div class="row">
+            <div class="col">            
+              <input type="text" [formControl]="control" (keydown.enter)="buscarDato()" class="form-control" placeholder="Search product" formControlName="seachProduct">
+            </div>
+            <div class="col">
+              <select class="form-select" [formControl]="controlFilter">
+                <option value="nameProduct">nameProduct</option>
+                <option value="codeProduct">codeProduct</option>
+                <option value="hasStock">hasStock</option>
+              </select>
+            </div>
+          </div>
+    </form>
+    <li *ngFor="let Product of ListProductI" >Code: {{Product.codeProduct}}, name product: {{Product.nameProduct}}, idCategoryProduct: {{Product.idCategoryProduct}}, hasStock: {{Product.hasStock}}</li>
+</div>
+<app-footer></app-footer>

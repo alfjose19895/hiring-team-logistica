@@ -1,0 +1,26 @@
+<app-header></app-header>
+<div class="container">
+    <h3>Category Products</h3>
+    <a class="btn btn-primary btn-sm" (click)="goNewCategoryProduct()">New Category</a>
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Id Category</th>
+                <th>Name Category</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let CategoryProductI of ListCategoryProductI">
+                <td>{{CategoryProductI.idCategoryProduct}}</td>
+                <td>{{CategoryProductI.nameCategoryProduct}}</td>
+                <td>
+                    <a class="btn btn-secondary btn-sm" (click)="goEditCategory(CategoryProductI.idCategoryProduct)">edit</a>
+                    <a class="btn btn-danger btn-sm" (click)="deleteCategory(CategoryProductI.idCategoryProduct)">delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<app-footer></app-footer>
