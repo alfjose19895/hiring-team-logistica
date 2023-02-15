@@ -1,6 +1,8 @@
 from datetime import datetime
 from pydantic import BaseModel,validator
 
+
+#?metodo que retorna la estructura de un modelo product
 def product_schema_function(product)->dict:
   return {
     "id"          : product.id,
@@ -14,6 +16,7 @@ def product_schema_function(product)->dict:
     "state"       : product.state
   }
 
+#?metodo que retorna la estructura list de un modelo product
 def products_schema_function(products)->list:
   return [product_schema_function(product) for product in products]
 

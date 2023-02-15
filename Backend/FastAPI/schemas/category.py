@@ -1,12 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel, validator
 
-
-def isNone(val):
-    if val== None:
-      return True;
-    else:
-      return val
+#?metodo que retorna la estructura de un modelo category
 def category_schema_function(category)->dict:
   return {
     "id"          : category.id,
@@ -15,7 +10,7 @@ def category_schema_function(category)->dict:
     "created_at"  : category.created_at,
     "updated_at"  : category.updated_at
   }
-
+#?metodo que retorna la lista estructura de un modelo category
 def categories_schema_function(categories)->list:
   return [category_schema_function(category) for category in categories]
 

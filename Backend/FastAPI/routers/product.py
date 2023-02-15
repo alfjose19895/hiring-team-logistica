@@ -9,7 +9,7 @@ router=APIRouter(prefix="/product",
 
 @router.post("/",status_code= status.HTTP_201_CREATED)
 async def product(product: product_schema.Product):
-  print( product)
+  #print( product)
   product= create(product)
   if product!=None:
     return product

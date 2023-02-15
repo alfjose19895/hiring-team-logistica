@@ -1,6 +1,5 @@
 from datetime import datetime
 from functools import reduce
-from importlib.resources import Resource
 import operator
 import schemas.product as product_schema
 import schemas.product_history as product_history_schema
@@ -21,17 +20,17 @@ def change_product_to_produc_history(product: product_schema.ProductFull)->produ
 def search_product_db(key: str, value)->product_schema.ProductFull:
   try:
     product = ProductModel.get(attrgetter(key)(ProductModel)==value)
-    print(product)
+    #print(product)
     product = product_schema.ProductFull(**product_schema.product_schema_function(product))
   except peewee.DoesNotExist:
     product = None
   return product
-
+#? Metodo encargado buscar registros dediantes filtros
 def search_product_for_filter(filter: product_schema.ProductSearch, is_and:bool=True):
   try:
     filter= dict(filter)
-    print(filter)
-    print(filter.items())
+    #print(filter)
+    #print(filter.items())
     expression_list = [attrgetter(field)(ProductModel) == value
                        for field, value in filter.items() if value!=None]
     if len(expression_list)>0:
@@ -45,15 +44,15 @@ def search_product_for_filter(filter: product_schema.ProductSearch, is_and:bool=
       return product
     else:
       return None
-  except Exception as e: # work on python 3.x
+  except Exception as e: 
     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-
+#? Metodo encargado buscar todos los productos activos
 def search_products():
   try:
     products = ProductModel.select().where(ProductModel.state==True)
     products =product_schema.products_schema_function(list(products))
     return products
-  except Exception as e: # work on python 3.x
+  except Exception as e: 
     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 #? Metodo encargado crear registros en la tabla product
 def create(product: product_schema.Product):
@@ -76,8 +75,8 @@ def update(product: product_schema.ProductUpdte):
   try:
     produ=search_product_db("id",product.id)
     if produ != None:
-      print( product_schema.ProductUpdte(**dict(produ)), "1")
-      print( product, "2")
+      #print( product_schema.ProductUpdte(**dict(produ)), "1")
+      #print( product, "2")
       if product_schema.ProductUpdte(**dict(produ))== product:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="No existen cambios en la actualizacion")
       product_history = change_product_to_produc_history(produ)
@@ -98,7 +97,7 @@ def update(product: product_schema.ProductUpdte):
     return None
   except peewee.IntegrityError as e:
     cod_error = str(e).rsplit(",")[0].replace("(","")
-    print( str(e))
+    #print( str(e))
     if int(cod_error)==1062:
       raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="No se puede actualziar el producto con un codigo de un producto ya existente")
     if int(cod_error)==1452:

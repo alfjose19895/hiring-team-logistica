@@ -19,7 +19,7 @@ oauth2= OAuth2PasswordBearer(tokenUrl="/login")
 crypt = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 async def get_current_user(token: str = Depends(oauth2)):
-    print(user.email)
+    #print(user.email)
     if user == None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -31,7 +31,7 @@ async def get_current_user(token: str = Depends(oauth2)):
 
 @router.post("/",status_code= status.HTTP_201_CREATED)
 async def user(user: User):
-  print( user)
+  #print( user)
   user= create(user)
   if user!=None:
     return user

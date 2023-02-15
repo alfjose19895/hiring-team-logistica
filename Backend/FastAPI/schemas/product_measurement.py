@@ -1,6 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 from decimal import Decimal
+
 def product_measurement_schema_function(product_measurement)->dict:
   return {
     "id"          : product_measurement.id,
@@ -13,7 +14,7 @@ def product_measurement_schema_function(product_measurement)->dict:
     "state"       : product_measurement.state
   }
 
-def categories_schema_function(product_measurements)->list:
+def products_measurement_function(product_measurements)->list:
   return [product_measurement_schema_function(product_measurement) for product_measurement in product_measurements]
 
 class ProductMeasurement(BaseModel):

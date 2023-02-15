@@ -1,6 +1,8 @@
 from datetime import datetime
 from pydantic import BaseModel
 
+
+#?metodo que retorna la estructura de un modelo product_history
 def product_history_schema_function(product_history)->dict:
   return {
     "id"          : product_history.id,
@@ -13,7 +15,7 @@ def product_history_schema_function(product_history)->dict:
     "updated_at"  : product_history.updated_at,
     "state"       : product_history.state
   }
-
+#?metodo que retorna la estructura list de un modelo product_history
 def categories_schema_function(categories)->list:
   return [product_history_schema_function(product_history) for product_history in categories]
 

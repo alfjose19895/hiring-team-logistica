@@ -1,4 +1,4 @@
-from fastapi import Depends,HTTPException,status, APIRouter
+from fastapi import HTTPException,status, APIRouter
 from controllers.category import create, update, delete, get_categories
 import schemas.category as CategorySchema
 
