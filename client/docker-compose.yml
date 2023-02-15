@@ -1,11 +1,12 @@
-# For more information: https://laravel.com/docs/sail
-version: "3.9"
+version: "3"
+
 services:
-  app:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+  web:
+    build: 
+      context: .
+      args:
+        VITE_APP_ROOT_API: ${VITE_APP_ROOT_API}
     ports:
-      - '5173:5173'
-    volumes:
-      - .:/client
+      - "9000:9000"
+    environment:
+      - VITE_APP_ROOT_API=${VITE_APP_ROOT_API}
