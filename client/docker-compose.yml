@@ -1,0 +1,11 @@
+# For more information: https://laravel.com/docs/sail
+version: "3.9"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - '5173:5173'
+    volumes:
+      - .:/client
