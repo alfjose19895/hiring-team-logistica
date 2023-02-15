@@ -1,19 +1,14 @@
-# For more information: https://laravel.com/docs/sail
 version: '3'
 services:
     api:
         build:
             dockerfile: Dockerfile
         container_name: candidate_evaluation_api
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
         ports:
             - '${APP_PORT:-80}:80'
             - '${APP_SSL_PORT:-443}:443'
         volumes:
             - '.:/app'
-        networks:
-            - sail
         depends_on:
             - mysql
     mysql:
@@ -30,8 +25,6 @@ services:
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
             - 'sail-mysql:/var/lib/mysql'
-        networks:
-            - sail
         healthcheck:
             test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
             retries: 3
@@ -47,20 +40,13 @@ services:
         environment:
             PMA_HOST: mysql
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-        networks:
-            - sail
-    mailhog:
-        image: 'mailhog/mailhog:latest'
+    client:
+        build:
+            context: ../client
+            dockerfile: Dockerfile
+        container_name: candidate_evaluation_client
         ports:
-            - '${FORWARD_MAILHOG_PORT:-1025}:1025'
-            - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
-        networks:
-            - sail
-networks:
-    sail:
-        driver: bridge
+            - '${APP_PORT:-4200}:81'
 volumes:
     sail-mysql:
         driver: local
-    sail-mongodb:
-        driver: local        

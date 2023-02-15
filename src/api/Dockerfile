@@ -6,4 +6,6 @@ COPY . .
 EXPOSE 80
 EXPOSE 443
 
+RUN php artisan migrate:fresh
+
 CMD ["/sbin/entrypoint.sh"]
