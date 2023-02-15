@@ -20,5 +20,4 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 #apython -m uvicorn api:app  --reload --port 1615
