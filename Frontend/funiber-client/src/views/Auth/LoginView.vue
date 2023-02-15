@@ -22,6 +22,13 @@
 /* import specific icons */
 import { computed, ref,  onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
+const axiosInstance = axios.create({
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "multipart/form-data"
+  }
+});
 const router = useRouter(); //<-- router declared outside function: CORRECT
 const email = ref("");
 const hidePassword = ref(true);
@@ -31,13 +38,24 @@ const passwordFieldType = computed(() => hidePassword.value ? "password" : "text
 
 const handlePassword =() =>{
   hidePassword.value = !hidePassword.value;
-
-  console.log("se ingreso");
 }
-const emit = defineEmits(['inFocus', 'submit'])
 const doLogin = () => {
   //emit('handlelogin', true);
-  router.push({ name: "home" });
+ // router.push({ name: "home" });
+  var bodyFormData = new FormData();
+  bodyFormData.append('username', email.value);
+  bodyFormData.append('password', password.value); 
+  axiosInstance.post("http://127.0.0.1:8000/login/",bodyFormData).then((response) => {
+    if (response.data.access_token != null ) {
+      router.push({ name: "home" });
+    }else{
+      alert("Credenciales Incorrectas");
+    }
+    console.log(response.data.access_token);
+  }).catch((response) =>{
+    console.log(response);
+        alert("Credenciales Incorrectas")
+      });
 };
 </script>
 

@@ -32,8 +32,14 @@
   });
   export default {
     name: "ListaProductoComponent",
-    components: {
-      
+    components: {    
+    },
+    props: {
+      refresh_data: {
+        type: Boolean,
+        required: false,
+        default: false
+      }
     },
     data: () => ({
       form: {
@@ -47,6 +53,19 @@
     }),
     created() {
     this.getListProducts ();
+  },
+  watch: {
+    refresh_data: {
+      handler: function(newVal) {
+        if (newVal === true) {
+          this.getListProducts();
+        }      
+      }
+    },
+    /*Se sensa variable para llamar el metodo de seteo de deudor */
+    deudorEdit() {
+      this.setDeudor();
+    }
   },
     methods: {
       submitOrden() {

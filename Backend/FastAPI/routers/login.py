@@ -18,6 +18,7 @@ crypt = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 @router.post("/")
 async def login(form: OAuth2PasswordRequestForm=Depends()):
+  print(form)
   user= search_user_db(form.username)
   #print(datetime.utcnow() + timedelta(minutes=15))
   #print(datetime.now() + timedelta(minutes=15))
