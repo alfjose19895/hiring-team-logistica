@@ -83,6 +83,7 @@ export default {
         console.log(this.category);
         console.log(response.data);
         this.refresh_data_child=true
+        alert("Registro Ingresado con Exito")
       }).catch((response) =>{
         this.refresh_data_child=false
         alert("Credenciales Incorrectas")
