@@ -10,10 +10,8 @@
           <input type="text" id="email" v-model="email" placeholder="elon@musk.io" autocomplete="off">
           <label for="password">Password</label>&nbsp;
           <font-awesome-icon :icon="['fas', passwordFieldIcon]" @click="handlePassword"/>
-          <i :class="passwordFieldIcon" v-on:click="handlePassword()" key="eyes"></i>
           <input :type="passwordFieldType" id="password" v-model="password" placeholder="**********">
           <button type="submit" @click.prevent="doLogin()">Log in</button>
-          {{ this.msg }}
         </form>
       </div>
     </div>

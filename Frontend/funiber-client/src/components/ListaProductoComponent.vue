@@ -7,6 +7,7 @@
       <th scope="col">Name</th>
       <th scope="col">Category</th>
       <th scope="col">Stok</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
@@ -17,6 +18,11 @@
         <td>{{ item.name }}</td>
         <td>{{ item.category.__data__.description }}</td>
         <td>{{ item.stock }}</td>
+        <td>
+          <font-awesome-icon icon="fa-regular fa-user-pen" />
+          <button type="button" class="btn btn-warning"><font-awesome-icon :icon="['fas', 'edit']"/></button>
+          <button type="button" class="btn btn-danger"><font-awesome-icon :icon="['fas', 'trash']"/></button>
+        </td>
       </tr>
     </template>
   </tbody>
@@ -81,4 +87,5 @@
     }
   }
   </script>
-  
+<style>
+</style>
