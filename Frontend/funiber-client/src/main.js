@@ -9,7 +9,7 @@ import { faUserSecret,faEye,faEyeSlash,faLightbulb,faPen,fas} from '@fortawesome
 library.add(faUserSecret,faEye,faEyeSlash,faLightbulb,faPen,fas)
 const app = createApp(App)
 .component('font-awesome-icon', FontAwesomeIcon);
-axios.defaults.baseURL="http://127.0.0.1:8000/";
+
 axios.defaults.headers.common["Authorization"];
 
 app.use(router,axios)

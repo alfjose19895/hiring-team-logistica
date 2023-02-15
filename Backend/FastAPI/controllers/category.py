@@ -16,7 +16,7 @@ def search_category_db(key: str, value)->CategorySchema.CategoryFull:
 
 def get_categories()->CategorySchema.CategoryFull:
   try:
-    category = CategoryModel.select()
+    category = CategoryModel.select().where(CategoryModel.state==True)
     print(category)
     category =  CategorySchema.categories_schema_function(list(category))
   except peewee.DoesNotExist:
@@ -31,7 +31,7 @@ def create(category: CategorySchema):
       category_dict= dict(category)
       category = CategoryModel.create(**category_dict)
     else:
-      raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="El categoria ya existe")
+      raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="La categoria ya existe")
   except peewee.DoesNotExist:
     category = None
   return category

@@ -50,7 +50,7 @@ def search_product_for_filter(filter: product_schema.ProductSearch, is_and:bool=
 
 def search_products():
   try:
-    products = ProductModel.select()
+    products = ProductModel.select().where(ProductModel.state==True)
     products =product_schema.products_schema_function(list(products))
     return products
   except Exception as e: # work on python 3.x

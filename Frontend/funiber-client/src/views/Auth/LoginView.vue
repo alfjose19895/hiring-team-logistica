@@ -43,67 +43,54 @@ const doLogin = () => {
   var bodyFormData = new FormData();
   bodyFormData.append('username', email.value);
   bodyFormData.append('password', password.value); 
-  axiosInstance.post("http://127.0.0.1:8000/login/",bodyFormData).then((response) => {
+  axiosInstance.post(import.meta.env.VITE_API_URL+"login/",bodyFormData).then((response) => {
     if (response.data.access_token != null ) {
       router.push({ name: "home" });
     }else{
       alert("Credenciales Incorrectas");
     }
     console.log(response.data.access_token);
-  }).catch((response) =>{
-    console.log(response);
-        alert("Credenciales Incorrectas")
-      });
+  }).catch((error) =>{
+    console.log(error.response.data)
+    alert(error.response.data.detail);
+  });
 };
 </script>
 
 <style>
-* {
-  box-sizing: border-box;
-  font-family: Verdana, sans-serif;
+
+div#login {
+  height: 80%;
+  margin: 60px;
+  padding: 20px;
+  width: 80%;
 }
 
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-
-div#app {
-  width: 50%;
-  height: 50%;
-  display: block;
-}
-
-div#app div#login {
+div#login {
   align-items: center;
   background-color: #e2e2e5;
   display: flex;
   justify-content: center;
-  width: 100%;
-  height: 100%;
 }
 
-div#app div#login div#description {
+div#login div#description {
   background-color: #ffffff;
   width: 280px;
   padding: 35px;
 }
 
-div#app div#login div#description h1,
-div#app div#login div#description p {
+div#login div#description h1,
+div#login div#description p {
   margin: 0;
 }
 
-div#app div#login div#description p {
+div#login div#description p {
   font-size: 0.8em;
   color: #95a5a6;
   margin-top: 10px;
 }
 
-div#app div#login div#form {
+div#login div#form {
   background-color: #34495e;
   border-radius: 5px;
   box-shadow: 0px 0px 30px 0px #666;
@@ -112,18 +99,18 @@ div#app div#login div#form {
   padding: 35px;
 }
 
-div#app div#login div#form label,
-div#app div#login div#form input {
+div#login div#form label,
+div#login div#form input {
   outline: none;
   width: 100%;
 }
 
-div#app div#login div#form label {
+div#login div#form label {
   color: #95a5a6;
   font-size: 0.8em;
 }
 
-div#app div#login div#form input {
+div#login div#form input {
   background-color: transparent;
   border: none;
   color: #ecf0f1;
@@ -131,12 +118,12 @@ div#app div#login div#form input {
   margin-bottom: 20px;
 }
 
-div#app div#login div#form ::placeholder {
+div#login div#form ::placeholder {
   color: #ecf0f1;
   opacity: 1;
 }
 
-div#app div#login div#form button {
+div#login div#form button {
   background-color: #ffffff;
   cursor: pointer;
   border: none;
@@ -145,31 +132,31 @@ div#app div#login div#form button {
   width: 100%;
 }
 
-div#app div#login div#form button:hover {
+div#login div#form button:hover {
   background-color: #eeeeee;
 }
 
-@media screen and (max-width: 600px) {
-  div#app div#login {
+@media screen and (max-width: 100%) {
+  div#login {
     align-items: unset;
     background-color: unset;
     display: unset;
     justify-content: unset;
   }
 
-  div#app div#login div#description {
+  div#login div#description {
     margin: 0 auto;
     max-width: 350px;
     width: 100%;
   }
 
-  div#app div#login div#form {
+  div#login div#form {
     border-radius: unset;
     box-shadow: unset;
     width: 100%;
   }
 
-  div#app div#login div#form form {
+  div#login div#form {
     margin: 0 auto;
     max-width: 280px;
     width: 100%;

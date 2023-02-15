@@ -21,4 +21,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#app.mount("/static",StaticFiles(directory="static"), name="static")  #* directory->debe ser el mismo nombre del directorio
+#apython -m uvicorn api:app  --reload --port 1615

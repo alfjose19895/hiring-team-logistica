@@ -27,7 +27,7 @@ async def product(id: int):
   else:
     raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Registro no Actualizado")
 
-@router.get("/filter",status_code= status.HTTP_200_OK)
+@router.post("/filter",status_code= status.HTTP_200_OK)
 async def product(filter: product_schema.ProductSearch):
   if filter!=None:
     return search_product_for_filter(filter)
