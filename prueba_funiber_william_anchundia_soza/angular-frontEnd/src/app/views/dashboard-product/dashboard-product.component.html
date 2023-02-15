@@ -1,0 +1,30 @@
+<app-header></app-header>
+
+<div class="container">
+    <h3>Products</h3>
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>code Product</th>
+                <th>Name Product</th>
+                <th>Category</th>
+                <th>Has Stock</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let ProductI of ListProductI">
+                <td>{{ProductI.codeProduct}}</td>
+                <td>{{ProductI.nameProduct}}</td>
+                <td>{{ProductI.idProduct}}</td>
+                <td><input type="checkbox" ng-model="activo"></td> <!--{{ProductI.hasStock}}-->
+                <td>
+                    <a class="btn btn-secondary btn-sm" (click)="goEditProduct(ProductI.idProduct)">edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<app-footer></app-footer>

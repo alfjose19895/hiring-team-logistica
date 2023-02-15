@@ -1,0 +1,18 @@
+<app-header></app-header>
+
+<div class="container">
+    <h3>New Category Products</h3>
+    <form [formGroup]="newCategoryProductForm" (ngSubmit)="onCreateCategoryProduct(newCategoryProductForm.value)">
+        <div class="row">
+          <div class="col">
+            <input type="hidden" class="form-control" formControlName="idCategoryProduct">
+            <input type="text" class="form-control" placeholder="Name category" formControlName="nameCategoryProduct">
+          </div>
+          <div class="col">
+            <input type="submit" class="form-control btn btn-primary" value="Save Category" >
+          </div>
+        </div>
+      </form>
+</div>
+
+<app-footer></app-footer>
