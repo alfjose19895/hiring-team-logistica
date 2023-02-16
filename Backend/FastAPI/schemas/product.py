@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel,validator
-
+from controllers.stock import search_stock_db
 
 #?metodo que retorna la estructura de un modelo product
 def product_schema_function(product)->dict:
@@ -8,7 +8,7 @@ def product_schema_function(product)->dict:
     "id"          : product.id,
     "code"        : product.code,
     "name"        : product.name,
-    "stock"       : product.stock,
+    "stock"       : search_stock_db(product.id),
     "category_id" : product.category_id.id,
     "category"    : product.category_id,
     "created_at"  : product.created_at,

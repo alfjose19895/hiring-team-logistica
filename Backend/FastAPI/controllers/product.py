@@ -26,13 +26,16 @@ def search_product_db(key: str, value)->product_schema.ProductFull:
     product = None
   return product
 #? Metodo encargado buscar registros dediantes filtros
-def search_product_for_filter(filter: product_schema.ProductSearch, is_and:bool=True):
+def search_product_for_filter(filter_: product_schema.ProductSearch, is_and:bool=True):
   try:
-    filter= dict(filter)
-    #print(filter)
+    search_stock= None
+    if filter_.stock != None:
+      search_stock=filter_.stock
+    filter_= dict(filter_)
+    #print(filter_)
     #print(filter.items())
     expression_list = [attrgetter(field)(ProductModel) == value
-                       for field, value in filter.items() if value!=None]
+                       for field, value in filter_.items() if value!=None]
     if len(expression_list)>0:
       if is_and:
         anded_expr = reduce(operator.and_, expression_list)
@@ -40,7 +43,11 @@ def search_product_for_filter(filter: product_schema.ProductSearch, is_and:bool=
       else:
         ored_expr = reduce(operator.or_, expression_list)
         product= ProductModel.select().where(ored_expr)
+      
       product=product_schema.products_schema_function(product)
+      if search_stock != None:
+        #print(product)
+        product = list(filter(lambda prod: prod["stock"] == search_stock, product))
       return product
     else:
       return None

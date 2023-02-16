@@ -1,0 +1,8 @@
+1)Ejecutar este comando en la raiz del proyecto(Backend\FastAPI)
+	docker-compose up -d
+2)Si no existe el archivo .env la ruta(Frontend\funiber-client)
+	crear el archivo .env en la misma ruta y agrear la variable de ambiente VITE_API_URL=http://localhost:5000/
+
+Posterior a la ejecucion del punto 1 y 2
+*Ejecutar el Comando:
+	npm run dev

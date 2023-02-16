@@ -9,7 +9,7 @@ router=APIRouter(prefix="/category",
 
 @router.post("/",status_code= status.HTTP_201_CREATED)
 async def category(category: CategorySchema.Category):
-  print( category)
+  #print( category)
   category= create(category)
   if category!=None:
     return category

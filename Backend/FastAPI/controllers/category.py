@@ -19,7 +19,7 @@ def search_category_db(key: str, value)->CategorySchema.CategoryFull:
 def get_categories()->CategorySchema.CategoryFull:
   try:
     category = CategoryModel.select().where(CategoryModel.state==True)
-    print(category)
+    #(category)
     category =  CategorySchema.categories_schema_function(list(category))
   except peewee.DoesNotExist:
     category = None

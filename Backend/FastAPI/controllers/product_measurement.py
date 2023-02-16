@@ -9,7 +9,7 @@ import peewee
 def search_product_measurement_db(key: str, value)->product_measurement_schema.ProductMeasurement:
   try:
     product_measurement = product_measurementModel.get(attrgetter(key)(product_measurementModel)==value)
-    print(product_measurement)
+    #print(product_measurement)
     product_measurement = product_measurement_schema.ProductMeasurement(**product_measurement_schema.product_measurement_schema_function(product_measurement))
   except peewee.DoesNotExist:
     product_measurement = None
@@ -34,8 +34,8 @@ def update(product_measurement: product_measurement_schema.ProductMeasurement):
   try:
     produ=search_product_measurement_db("product_id",product_measurement.product_id)
     if produ != None:
-      print( product_measurement_schema.product_measurementUpdte(**dict(produ)), "1")
-      print( product_measurement, "2")
+      #print( product_measurement_schema.product_measurementUpdte(**dict(produ)), "1")
+      #print( product_measurement, "2")
       if product_measurement_schema.product_measurementUpdte(**dict(produ))== product_measurement:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="No existen cambios en la actualizacion")
       produ.width  = product_measurement.width
@@ -52,7 +52,7 @@ def update(product_measurement: product_measurement_schema.ProductMeasurement):
     return None
   except peewee.IntegrityError as e:
     cod_error = str(e).rsplit(",")[0].replace("(","")
-    print( str(e))
+    #print( str(e))
     if int(cod_error)==1062:
       raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="No se puede actualziar el product_measuremento con un codigo de un product_measuremento ya existente")
     if int(cod_error)==1452:
