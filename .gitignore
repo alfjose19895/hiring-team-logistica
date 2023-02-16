@@ -1,9 +1,9 @@
 /node_modules
+../node_modules
 /public/hot
 /public/storage
 /storage/*.key
 /vendor
-.env
 .env.backup
 .phpunit.result.cache
 docker-compose.override.yml
@@ -13,3 +13,25 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+# Byte-compiled / optimized / DLL files
+__pycache__/
+**/__pycache__/
+***/__pycache__/
+*.py[cod]
+*$py.class
+.installed.cfg
+bin
+develop-eggs
+dist
+downloads
+eggs
+parts
+src/*.egg-info
+lib
+lib64
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
