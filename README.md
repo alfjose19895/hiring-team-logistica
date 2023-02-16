@@ -1,14 +1,12 @@
 #### Note for deploy in dev:
 1) Execute this command in the root of the project (Backend/FastAPI)
 	-docker-compose up -d
-2) If the .env file does not exist the path(Frontendfuniber-client)
-	-create the .env file in the same path and add the environment variable VITE_API_URL=http://localhost:5000/
-
-After the execution of the point 1 and 2
-*Execute the command:
-	-npm run dev
-API documentation:
-	-http://localhost:5000/docs
+2) If the .env file does not exist the path(Frontend/funiber-client)
+	-create the .env file in the same path and add the environment variable **VITE_API_URL=http://localhost:5000/**
+3) After the execution of the point 1 and 2. Execute the command:
+* npm install in path(Frontend/funiber-client)
+* npm run dev
+4) API documentation: **http://localhost:5000/docs**
 #### Inventory management requirements:
 Hello candidate! welcome to the development test for the position of Semi-Senior Developer for CT Funiber Ecuador. We present you with an inventory system development challenge with the requirements detailed below.
 
