@@ -18,6 +18,8 @@
 --
 -- Table structure for table `categories`
 --
+DROP DATABASE IF EXISTS `funiber`;
+DROP SCHEMA IF EXISTS `funiber`;
 CREATE SCHEMA `funiber` ;
 USE `funiber`;
 DROP TABLE IF EXISTS `categories`;
@@ -235,3 +237,4 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2023-02-15 15:14:46
+select * from categories;
