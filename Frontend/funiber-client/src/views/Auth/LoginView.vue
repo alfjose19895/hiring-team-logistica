@@ -2,12 +2,12 @@
     <div id="login">
       <div id="description">
         <h1>Logins</h1>
-        <p>By ogging in you agres to the ridiculously long terms that you didn't bother to read.</p>
+        <p>Pruebas Tecnicas</p>
       </div>
       <div id="form">
         <form @submit.prevent="doLogin">
           <label for="email">Email</label>
-          <input type="text" id="email" v-model="email" placeholder="elon@musk.io" autocomplete="off">
+          <input type="text" id="email" v-model="email" placeholder="@" autocomplete="off">
           <label for="password">Password</label>&nbsp;
           <font-awesome-icon :icon="['fas', passwordFieldIcon]" @click="handlePassword"/>
           <input :type="passwordFieldType" id="password" v-model="password" placeholder="**********">
