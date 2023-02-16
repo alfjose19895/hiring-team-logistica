@@ -6,3 +6,6 @@
 Posterior a la ejecucion del punto 1 y 2
 *Ejecutar el Comando:
 	npm run dev
+
+Documentacion del API:
+	http://localhost:5000/docs
