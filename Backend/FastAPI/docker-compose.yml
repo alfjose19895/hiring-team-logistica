@@ -1,0 +1,14 @@
+services:
+  pythonapp:
+    build: ./python/
+    command: sh -c "sleep 10s"
+    depends_on:
+      - mysql
+  mysql:
+    build: ./mysql/
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'funiber'
+      MYSQL_ROOT_PASSWORD: ''
+    ports:
+      -'3306:3306'
