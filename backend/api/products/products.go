@@ -134,12 +134,12 @@ func DeleteProduct(ctx *fiber.Ctx) error {
 
 	db.Where("product_id = ?", product.ID).First(&productHistory)
 
+	db.Delete(&productStock)
 	// delete the history
 	db.Delete(&productHistory)
 
 	// Delete the product
 	db.Delete(&product)
-	db.Delete(&productStock)
 
 	return ctx.Status(fiber.StatusNoContent).JSON(nil)
 }
