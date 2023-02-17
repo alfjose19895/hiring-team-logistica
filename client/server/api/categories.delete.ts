@@ -6,9 +6,12 @@ export default defineEventHandler(async (event) => {
       method: 'DELETE',
     }
   )
-  if (!response.ok) {
-    throw new Error('Failed to delete category')
-  } else {
-    return { id: query.id }
+  if (response.status === 204) {
+    return {
+      status: 204,
+      body: 'Deleted',
+    }
+  } else if (response.status >= 400 && response.status < 500) {
+    return await response.json()
   }
 })

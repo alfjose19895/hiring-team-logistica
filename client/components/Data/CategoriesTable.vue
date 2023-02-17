@@ -68,6 +68,7 @@ const createColumns = ({
 
 const categoryAboutDelete = ref<CategoryType | null>(null)
 const emit = defineEmits(['onDelete'])
+const resultMessage = ref<string | null>(null)
 
 const deleteCategory = async () => {
   const response = await useFetch('/api/categories', {
@@ -76,7 +77,17 @@ const deleteCategory = async () => {
       id: categoryAboutDelete.value?.id,
     },
   })
-  if (response.data) {
+  if (response.data.value.status >= 400) {
+    resultMessage.value = response.data.value.message
+    setTimeout(() => {
+      resultMessage.value = ''
+    }, 3000)
+  } else {
+    resultMessage.value = 'Category deleted successfully'
+    setTimeout(() => {
+      resultMessage.value = ''
+    }, 3000)
+    data.value = await response.data.value
     emit('onDelete')
   }
 }
@@ -98,6 +109,7 @@ const pagination = ref<PaginationProps | false>({
     <span class="text-primary-500 font-bold">{{ data?.length }}</span>
     categories created that you can use to categorize your products.
   </span>
+  <span class="text-green-300 font-bold font-poppins">{{ resultMessage }}</span>
   <DataTable
     :columns="columns"
     class="font-inter mt-2"

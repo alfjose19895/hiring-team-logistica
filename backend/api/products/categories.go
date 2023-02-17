@@ -60,6 +60,20 @@ func DeleteCategory(ctx *fiber.Ctx) error {
 		return pkg.UnexpectedError(err.Error())
 	}
 
+	// check if category is used in products
+	var product models.Product
+	db.Where("category_id = ?", id).First(&product)
+	if product.ID != 0 {
+		return pkg.Unauthorized("The category is being used by a product")
+	}
+
+	// check if category is used in product history
+	var productHistory models.ProductHistorian
+	db.Where("category_id = ?", id).First(&productHistory)
+	if productHistory.ID != 0 {
+		return pkg.Unauthorized("The category is being used to register a product history")
+	}
+
 	// soft delete
 	db.Delete(&category)
 
