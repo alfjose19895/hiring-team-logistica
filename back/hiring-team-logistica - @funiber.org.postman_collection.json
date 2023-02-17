@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "015d3a4d-9167-481f-ae46-ec52125fc757",
+		"name": "hiring-team-logistica - @funiber.org",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13260496"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "/api/auth/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"jonathan@example.com\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{path_url}}/api/auth/login",
+							"host": [
+								"{{path_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "/api/product/V1/index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:80/public/api/product/V1/index",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "80",
+							"path": [
+								"public",
+								"api",
+								"product",
+								"V1",
+								"index"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/product/V1/create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"code\": \"123\",\r\n    \"product_name\": \"test\",\r\n    \"has_stock\": 1,\r\n    \"category_id\": \"1\",\r\n    \"product_measurements_id\": \"1\",\r\n    \"stock_inquiries_id\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{path_url}}/api/product/V1/create",
+							"host": [
+								"{{path_url}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"V1",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/product/V1/update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"code\": \"0102\",\r\n    \"product_name\": \"Test\",\r\n    \"has_stock\": 1,\r\n    \"category_id\": 4,\r\n    \"category_name\": \"Bienes de emergencia\",\r\n    \"product_measurements_id\": 1,\r\n    \"size\": \"12\",\r\n    \"weight\": \"13\",\r\n    \"volume\": \"14\",\r\n    \"price\": \"14\",\r\n    \"stock_inquiries_id\": 1,\r\n    \"quantity\": 16\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{path_url}}/api/product/V1/update",
+							"host": [
+								"{{path_url}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"V1",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "/api/product-categorization/V1/index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{path_url}}/api/product-categorization/V1/index",
+							"host": [
+								"{{path_url}}"
+							],
+							"path": [
+								"api",
+								"product-categorization",
+								"V1",
+								"index"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ProductCategorization",
+			"item": [
+				{
+					"name": "/api/product-categorization/V1/index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{path_url}}/api/product-categorization/V1/index",
+							"host": [
+								"{{path_url}}"
+							],
+							"path": [
+								"api",
+								"product-categorization",
+								"V1",
+								"index"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ProductChangeHistory",
+			"item": [
+				{
+					"name": "/api/product-change-history/V1/index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{path_url}}/api/product-change-history/V1/index",
+							"host": [
+								"{{path_url}}"
+							],
+							"path": [
+								"api",
+								"product-change-history",
+								"V1",
+								"index"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "path_url",
+			"value": "http://127.0.0.1:8000",
+			"type": "string"
+		}
+	]
+}
