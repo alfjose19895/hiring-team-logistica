@@ -10,3 +10,7 @@ Simple, minimalistic and modern inventory management system. This site was desig
 4. Wait for the containers to start, and try to access the site at `http://localhost:3000`.
 5. Use the credentials `admin` and `admin` to login.
 6. Have fun!
+
+## Seed
+
+To seed an example items, you must go to the `http://localhost:5050/api/v1/products/seed` (GET method).
