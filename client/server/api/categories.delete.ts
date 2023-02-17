@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   const response = await fetch(
-    `http://localhost:5050/api/v1/products/categories/${query.id}`,
+    `http://backend:5000/api/v1/products/categories/${query.id}`,
     {
       method: 'DELETE',
     }

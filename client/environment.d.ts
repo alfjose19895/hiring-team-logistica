@@ -6,7 +6,7 @@ declare global {
       NODE_ENV: 'development'
       PORT?: string
       PWD: string
-      BACKEND_URL: string
+      BACKEND_BASEURL: string
     }
   }
 }

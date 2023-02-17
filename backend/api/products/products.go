@@ -10,9 +10,12 @@ import (
 func CreateProduct(ctx *fiber.Ctx) error {
 	db := database.DB
 
+	// Input request
 	var productInput ProductInput
-	var productOutput ProductOutput
+
+	// Models to be used
 	var productModel models.Product
+	var productTypeMeasure models.TypeMeasurement
 	var productCategory models.ProductCategory
 	var productMeasurement models.ProductMeasurement
 	var productStock models.ProductStock
@@ -21,73 +24,217 @@ func CreateProduct(ctx *fiber.Ctx) error {
 		return pkg.BadRequest("invalid request body: " + err.Error())
 	}
 
+	// Check if the product code already exists
 	db.Where("code = ?", productInput.Code).First(&productModel)
 	if productModel.ID != 0 {
-		return pkg.RegistryExists("product already exists")
+		return pkg.RegistryExists("Product code already exists")
 	}
 
+	// Check if the category exists
 	db.Where("id = ?", productInput.CategoryID).First(&productCategory)
 	if productCategory.ID == 0 {
-		return pkg.EntityNotFound("category does not exist")
+		return pkg.EntityNotFound("Category does not exist")
 	}
 
-	db.Where("id = ?", productInput.MeasureID).First(&productMeasurement)
-	if productMeasurement.ID == 0 {
-		return pkg.EntityNotFound("measurement does not exist")
+	// Check if the measurement exists
+	db.Where("id = ?", productInput.TypeMeasure).First(&productTypeMeasure)
+	if productTypeMeasure.ID == 0 {
+		return pkg.EntityNotFound("Measurement does not exist")
 	}
 
-	productModel.Code = productInput.Code
-	productModel.Name = productInput.Name
-	productModel.InStock = productInput.InStock
-	productModel.CategoryID = productCategory.ID
-	productModel.MeasureID = productMeasurement.ID
-
-	db.Create(&productModel)
-
-	productStock.ProductID = productModel.ID
 	if productInput.InStock { // This is just an extra feature to show the quantity of the product based on the boolean value
-		productStock.Quantity = 1
+		productStock.Quantity = *productInput.Quantity
 	} else {
 		productStock.Quantity = 0
 	}
 
 	db.Create(&productStock)
 
-	productOutput.ID = productModel.ID
-	productOutput.Code = productModel.Code
-	productOutput.Name = productModel.Name
-	productOutput.InStock = productModel.InStock
-	productOutput.CategoryID = productModel.CategoryID
-	productOutput.MeasurementID = productModel.MeasureID
-	productOutput.StockID = productStock.ID
+	// Create the product measures
+	productMeasurement.Cost = productInput.Cost
+	productMeasurement.Height = productInput.Height
+	productMeasurement.Width = productInput.Width
+	productMeasurement.Depth = productInput.Depth
+	productMeasurement.Weight = productInput.Weight
+	productMeasurement.Volume = productInput.Volume
 
-	return ctx.Status(fiber.StatusCreated).JSON(productOutput)
+	db.Create(&productMeasurement)
+
+	// Set the product model
+	productModel.Code = productInput.Code
+	productModel.Name = productInput.Name
+	productModel.InStock = productInput.InStock
+	productModel.CategoryID = productCategory.ID
+	productModel.TypeMeasurement = productTypeMeasure
+	productModel.Measure = productMeasurement
+	productModel.Stock = productStock
+
+	// Create the product
+	db.Create(&productModel)
+
+	// create the history
+	var history models.ProductHistorian
+	history.Action = "Created"
+	history.ProductID = productModel.ID
+	history.Quantity = productStock
+	history.Measure = productMeasurement
+	history.TypeMeasurement = productTypeMeasure
+	history.Category = productCategory
+
+	db.Create(&history)
+
+	// Set the product output model
+	return ctx.Status(fiber.StatusCreated).JSON(productModel)
 }
 
 func GetProducts(ctx *fiber.Ctx) error {
 	db := database.DB
 
 	var products []models.Product
+	db.Preload("Category").Preload("Measure").Preload("TypeMeasurement").Preload("Stock").Find(&products)
+
+	// Set the output model
 	var productsOutput []ProductOutput
-
-	db.Find(&products)
-
 	for _, product := range products {
-		var productOutput ProductOutput
-		var productStock models.ProductStock
-		if product.InStock {
-			db.Where("product_id = ?", product.ID).First(&productStock)
-		}
-		productOutput.ID = product.ID
-		productOutput.Code = product.Code
-		productOutput.Name = product.Name
-		productOutput.InStock = product.InStock
-		productOutput.CategoryID = product.CategoryID
-		productOutput.MeasurementID = product.MeasureID
-		productOutput.StockID = productStock.ID
-
-		productsOutput = append(productsOutput, productOutput)
+		productsOutput = append(productsOutput, ProductOutput{
+			ID:                  product.ID,
+			Code:                product.Code,
+			Name:                product.Name,
+			InStock:             product.InStock,
+			Category:            product.Category,
+			TypeMeasure:         product.TypeMeasurement,
+			CreatedAt:           product.CreatedAt,
+			UpdatedAt:           product.UpdatedAt,
+			ProductStock:        product.Stock,
+			ProductMeasurements: product.Measure,
+		},
+		)
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(productsOutput)
+	return ctx.Status(fiber.StatusOK).JSON(&productsOutput)
+}
+
+func DeleteProduct(ctx *fiber.Ctx) error {
+	db := database.DB
+
+	// Get the product id
+	id := ctx.Params("id")
+
+	// Check if the product exists
+	var product models.Product
+	var productStock models.ProductStock
+	var productHistory models.ProductHistorian
+	db.Where("id = ?", id).First(&product)
+	if product.ID == 0 {
+		return pkg.EntityNotFound("Product does not exist")
+	}
+
+	// with the id of the product, we can get the id of the stock and delete it
+	db.Where("id = ?", product.StockID).First(&productStock)
+
+	db.Where("product_id = ?", product.ID).First(&productHistory)
+
+	// delete the history
+	db.Delete(&productHistory)
+
+	// Delete the product
+	db.Delete(&product)
+	db.Delete(&productStock)
+
+	return ctx.Status(fiber.StatusNoContent).JSON(nil)
+}
+
+func UpdateProduct(ctx *fiber.Ctx) error {
+	db := database.DB
+
+	// Get the product id
+	id := ctx.Params("id")
+
+	// Check if the product exists
+	var product models.Product
+
+	db.Where("id = ?", id).Find(&product)
+
+	if product.ID == 0 {
+		return pkg.EntityNotFound("Product does not exist")
+	}
+
+	// Input request
+	var productInput ProductUpdateInput
+
+	if err := ctx.BodyParser(&productInput); err != nil {
+		return pkg.BadRequest("invalid request body: " + err.Error())
+	}
+
+	// models to be used
+	var productCategory models.ProductCategory
+	var productTypeMeasure models.TypeMeasurement
+	var productStock models.ProductStock
+	var productMeasures models.ProductMeasurement
+
+	// Check if the category exists
+	db.Where("id = ?", productInput.CategoryID).First(&productCategory)
+	if productCategory.ID == 0 {
+		return pkg.EntityNotFound("Category does not exist")
+	}
+
+	// Check if the measurement exists
+	db.Where("id = ?", productInput.TypeMeasure).First(&productTypeMeasure)
+	if productTypeMeasure.ID == 0 {
+		return pkg.EntityNotFound("Measurement does not exist")
+	}
+
+	// get the stock_id from products table
+	db.Where("id = ?", product.StockID).First(&productStock)
+	if productStock.ID == 0 {
+		return pkg.EntityNotFound("Stock does not exist")
+	}
+
+	// get the measure_id from products table
+	db.Where("id = ?", product.MeasureID).First(&productMeasures)
+	if productMeasures.ID == 0 {
+		return pkg.EntityNotFound("Measure does not exist")
+	}
+
+	// Update InStock
+	db.Model(&product).Update("in_stock", productInput.InStock)
+
+	// Update the product stock
+	db.Model(&productStock).Updates(models.ProductStock{
+		Quantity: productInput.Quantity,
+	})
+
+	// Update the product measures
+	db.Model(&productMeasures).Updates(models.ProductMeasurement{
+		Cost: productInput.Cost,
+	})
+
+	// Update the product
+	db.Model(&product).Updates(models.Product{
+		Name:              productInput.Name,
+		CategoryID:        productInput.CategoryID,
+		TypeMeasurementID: productInput.TypeMeasure,
+	})
+
+	// reload the relations
+	db.Preload("Category").Preload("Measure").Preload("TypeMeasurement").Preload("Stock").Find(&product)
+
+	// create the history
+	var history models.ProductHistorian
+	history.Action = "Updated"
+	history.ProductID = product.ID
+	history.Quantity = productStock
+	history.Measure = product.Measure
+	history.TypeMeasurement = product.TypeMeasurement
+	history.Category = product.Category
+
+	db.Create(&history)
+
+	// Set the product output model
+	return ctx.Status(fiber.StatusOK).JSON(&product)
+}
+
+func Seed(ctx *fiber.Ctx) error {
+	SeedAll()
+	return ctx.Status(fiber.StatusOK).JSON("Seeded")
 }

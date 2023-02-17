@@ -5,8 +5,10 @@ import "github.com/gofiber/fiber/v2"
 func Routes(route fiber.Router) {
 	products := route.Group("/products")
 
-	products.Post("/create", CreateProduct)
-	products.Get("/list", GetProducts)
+	products.Post("/", CreateProduct)
+	products.Get("/", GetProducts)
+	products.Delete("/:id", DeleteProduct)
+	products.Put("/:id", UpdateProduct)
 
 	// Product categories
 	categories := products.Group("/categories")
@@ -21,4 +23,12 @@ func Routes(route fiber.Router) {
 	measurements.Get("/", GetAllMeasures)
 	measurements.Get("/:id", GetMeasure)
 	measurements.Delete("/:id", DeleteMeasure)
+
+	// History
+	history := products.Group("/history")
+	history.Get("/:code", GetHistory)
+
+	// seed
+	seed := products.Group("/seed")
+	seed.Get("/", Seed)
 }

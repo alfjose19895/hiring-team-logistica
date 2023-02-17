@@ -1,6 +1,6 @@
 export default defineEventHandler(async () => {
   // fetch from remote API
-  const response = await fetch(`http://localhost:5050/api/v1/activity/recent`, {
+  const response = await fetch(`http://backend:5000/api/v1/activity/recent`, {
     mode: 'no-cors',
   })
   if (!response.ok) {

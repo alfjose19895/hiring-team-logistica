@@ -3,14 +3,11 @@ module com.funiber.org
 go 1.20
 
 require (
-	github.com/gofiber/fiber/v2 v2.42.0 // direct
-	gorm.io/driver/mysql v1.4.6 // direct
-	gorm.io/gorm v1.24.5 // direct
-)
-
-require (
 	github.com/go-faker/faker/v4 v4.0.0
+	github.com/gofiber/fiber/v2 v2.42.0
 	golang.org/x/crypto v0.5.0
+	gorm.io/driver/mysql v1.4.6
+	gorm.io/gorm v1.24.5
 )
 
 require (

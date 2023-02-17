@@ -276,9 +276,11 @@ const createMeasure = async () => {
               class="mt-4"
               @click="
                 () => {
-                  if (formState?.validate()) {
-                    createMeasure()
-                  }
+                  formState?.validate(async (errors) => {
+                    if (!errors) {
+                      await createMeasure()
+                    }
+                  })
                 }
               "
               :class="{
@@ -294,7 +296,7 @@ const createMeasure = async () => {
     </Modal>
   </PageSection>
   <PageSection>
-    <DataMeasureType :key="data_measure" @onDelete="reload" />
+    <LazyDataMeasureType :key="data_measure" @onDelete="reload" />
   </PageSection>
 </template>
 

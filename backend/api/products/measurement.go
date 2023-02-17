@@ -15,9 +15,10 @@ func CreateMeasure(ctx *fiber.Ctx) error {
 		return pkg.BadRequest("invalid request body: " + err.Error())
 	}
 
-	db.Where("name = ?", measure.Name).First(&measure)
+	// name or abbreviation must be unique
+	db.Where("name = ? OR abbreviation = ?", measure.Name, measure.Abbreviation).First(&measure)
 	if measure.ID != 0 {
-		return pkg.RegistryExists("measurement already exists")
+		return pkg.RegistryExists("The name or abbreviation already exists")
 	}
 
 	db.Create(&measure)
@@ -31,7 +32,7 @@ func GetAllMeasures(ctx *fiber.Ctx) error {
 
 	db.Find(&measures)
 
-	return ctx.Status(fiber.StatusOK).JSON(measures)
+	return ctx.Status(fiber.StatusOK).JSON(&measures)
 }
 
 func GetMeasure(ctx *fiber.Ctx) error {
@@ -55,6 +56,13 @@ func DeleteMeasure(ctx *fiber.Ctx) error {
 	db.Where("id = ?", id).First(&measure)
 	if measure.ID == 0 {
 		return pkg.EntityNotFound("measurement not found")
+	}
+
+	// check if the measurement is being used by a product
+	var product models.Product
+	db.Where("type_measurement_id = ?", id).First(&product)
+	if product.ID != 0 {
+		return pkg.Unauthorized("The measurement is being used by a product")
 	}
 
 	db.Delete(&measure)

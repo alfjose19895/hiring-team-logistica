@@ -32,10 +32,8 @@ func main() {
 			log.Fatal("Error while migrating the database:" + err.Error())
 		}
 		// Mock the login user for testing purposes
-		ok := auth.MockLoginUser()
-		if ok != nil {
-			return
-		}
+	_:
+		auth.MockLoginUser()
 	}
 
 	api.Setup(app)

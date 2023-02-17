@@ -19,11 +19,10 @@ func CreateCategory(ctx *fiber.Ctx) error {
 
 	db.Where("name = ?", category.Name).First(&category)
 	if category.ID != 0 {
-		return pkg.RegistryExists("category already exists")
+		return pkg.RegistryExists("Category already exists")
 	}
 
 	db.Create(&category)
-
 	return ctx.Status(fiber.StatusCreated).JSON(category)
 }
 

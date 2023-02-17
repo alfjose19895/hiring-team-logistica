@@ -86,7 +86,9 @@ const reload = () => {
 
 // push to api server
 const successMessage = ref('')
+const errorMessage = ref('')
 
+const data = ref<any>([])
 const createCategory = async () => {
   const response = await fetch('/api/categories', {
     method: 'POST',
@@ -95,8 +97,13 @@ const createCategory = async () => {
     },
     body: JSON.stringify(categoryModel.value),
   })
-
-  if (response.ok) {
+  data.value = await response.json()
+  if (data.value.status >= 400) {
+    errorMessage.value = data.value.message
+    setTimeout(() => {
+      errorMessage.value = ''
+    }, 3000)
+  } else {
     showForm.value = false
     successMessage.value = 'Category created successfully'
     setTimeout(() => {
@@ -139,6 +146,9 @@ const createCategory = async () => {
     </div>
     <span v-if="successMessage" class="text-green-500 font-poppins font-bold">
       {{ successMessage }}
+    </span>
+    <span v-if="errorMessage" class="text-red-500 font-poppins font-bold">
+      {{ errorMessage }}
     </span>
   </PageSection>
   <Transition>

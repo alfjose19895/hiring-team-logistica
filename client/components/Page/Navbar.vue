@@ -48,13 +48,13 @@ const menus = computed((): IMenuItem[] => [
     icon: OptionProducts,
     type: 'dropdown',
     text: capitalize(t('pages.products.nav')),
-    route: { name: 'products' },
     options: [
       {
         text: capitalizeFirst(productsOptions.value[0]),
         type: 'link',
         key: 'create',
         icon: ItemCreate,
+        route: { name: '/dashboard/products' },
       },
       {
         text: capitalizeFirst(productsOptions.value[1]),
@@ -68,12 +68,12 @@ const menus = computed((): IMenuItem[] => [
         key: 'delete',
         icon: ItemDelete,
       },
-      {
+      /*{
         text: capitalizeFirst(productsOptions.value[3]),
         type: 'link',
         key: 'view',
         icon: ItemView,
-      },
+      },*/
     ],
   },
   {
@@ -87,7 +87,7 @@ const menus = computed((): IMenuItem[] => [
         key: 'create-categories',
         icon: ItemCreate,
       },
-      {
+      /*{
         text: capitalizeFirst(categoriesOptions.value[1]),
         type: 'link',
         key: 'update-categories',
@@ -104,7 +104,7 @@ const menus = computed((): IMenuItem[] => [
         type: 'link',
         key: 'view-categoriess',
         icon: ItemView,
-      },
+      },*/
     ],
   },
   {
@@ -163,6 +163,11 @@ const menus = computed((): IMenuItem[] => [
                 v-else-if="item.type === 'dropdown'"
                 :text="item.text"
                 :icon="item.icon"
+                :to="
+                  item.text.match(/product/i)
+                    ? '/dashboard/products'
+                    : 'dashboard/products/categories'
+                "
                 :options="item.options"
                 class="hover:no-underline hover:text-slate-900 hover:dark:text-white hover:cursor-pointer"
               />

@@ -32,10 +32,10 @@ func SetupDatabase() error {
 		config = gorm.Config{
 			Logger: logger.Default.LogMode(logger.Info),
 			NowFunc: func() time.Time {
-				// UTC must be Timezone in America/Guayaquil and formatted as 2006-01-02 15:04:05
-				//format := "2006-01-02 15:04:05"
-				utc, _ := time.LoadLocation("America/Guayaquil")
-
+				utc, err := time.LoadLocation("America/Bogota")
+				if err != nil {
+					log.Fatalln("Error while loading the timezone: " + err.Error())
+				}
 				return time.Now().In(utc).Round(time.Second)
 			},
 		}

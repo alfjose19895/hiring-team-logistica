@@ -15,6 +15,9 @@ pages:
   products:
     title: products
     header: products🛍️
+    history:
+      title: product history
+      description: See the history of the product, when it was created, when it was updated.
     categories:
       title: product categories
       description: The category of the product is and qualitative attribute that you want to use to classify the product. For example, if you want to classify the product by clothes, furniture, or food, you can use the category attribute as the classification.

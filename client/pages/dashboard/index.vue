@@ -36,14 +36,16 @@ definePageMeta({
           )
         }}
         Last login was
-        {{ new Date(session?.user.last_login as Date).toLocaleString() }}
+        {{
+          session?.user.last_login
+            ? new Date(session?.user.last_login as Date).toLocaleString()
+            : 'never'
+        }}
       </span>
     </PageHeader>
     <PageBody>
       <PageSection>
-        <!-- TODO: Fetch real data from the API. Data showed in the next component ARE MOCKED-->
         <DashboardDataInfo />
-        <!-- End TODO -->
         <span class="text-gray-400 font-inter italic">
           * Note that products value is the number of products created. Also,
           every product has their own stock.

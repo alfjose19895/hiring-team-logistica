@@ -18,11 +18,11 @@ func PushActivity(user *models.Account, activity string, typeofactivity string, 
 	database.DB.Create(&recent)
 }
 
-// Return the last 10 activities in JSON format
+// Return the last 100 activities in JSON format
 func GetRecentActivity(c *fiber.Ctx) error {
 	db := database.DB
 	var activities []models.RecentActivity
-	err := db.Order("created_at asc").Limit(10).Find(&activities).Error
+	err := db.Order("created_at asc").Limit(100).Find(&activities).Error
 	if err != nil {
 		return pkg.UnexpectedError("Error while querying the database:" + err.Error())
 	}

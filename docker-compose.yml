@@ -4,36 +4,37 @@ services:
   database:
     image: mysql:5.7
     restart: always
-    container_name: mysql_db
     environment:
-        MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-        MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: "${DB_DATABASE}"
     ports:
       - "3306:3306"
     volumes:
-        - 'api-mysql:/var/lib/mysql'
+      - "api-mysql:/var/lib/mysql"
     networks:
-        - application
+      - application
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-p${DB_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
       retries: 2
       timeout: 5s
 
-  code.dev:
+  backend:
     build:
-        context: ./backend
-        dockerfile: dev.Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     env_file:
       - .env
     environment:
-        - DB_HOST=database
-        - DB_DATABASE=${DB_DATABASE}
-        - DB_USERNAME=${DB_USERNAME}
-        - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=database
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
     volumes:
-        - ./backend:/app
+      - ./backend:/app
     ports:
-        - "5000"
+      - "5000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: always
     depends_on:
       - database
@@ -44,23 +45,44 @@ services:
     deploy:
       replicas: 2
 
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      - NUXT_SECRET=${NUXT_SECRET}
+      - ORIGIN=${ORIGIN}
+    volumes:
+      - ./client:/app
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    depends_on:
+      - nginx
+    networks:
+      - application
+    environment:
+      - NUXT_SECRET=${NUXT_SECRET}
+      - ORIGIN=${ORIGIN}
+
   nginx:
     image: nginx:latest
-    container_name: nginx_app
     restart: always
     volumes:
       - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - code.dev
+      - backend
     ports:
-        - "5050:5050"
+      - "5050:5050"
     networks:
-        - application
+      - application
 
 networks:
-    application:
-        driver: bridge
+  application:
+    driver: bridge
 
 volumes:
-    api-mysql:
-        driver: local
+  api-mysql:
+    driver: local

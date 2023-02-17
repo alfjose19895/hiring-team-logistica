@@ -19,6 +19,10 @@ func ConnectionURLBuilder(n string) (string, error) {
 				os.Getenv("DB_DATABASE"),
 			)
 		}
+	case "fiber":
+		{
+			url = fmt.Sprintf("%s:%s", os.Getenv("SERVER_HOST"), os.Getenv("SERVER_PORT"))
+		}
 	default:
 		return "", fmt.Errorf("database %s not supported", n)
 	}

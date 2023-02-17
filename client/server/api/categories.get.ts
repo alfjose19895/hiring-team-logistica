@@ -1,10 +1,14 @@
 export default defineEventHandler(async () => {
   // fetch from remote API
   const response = await fetch(
-    'http://localhost:5050/api/v1/products/categories',
+    'http://backend:5000/api/v1/products/categories',
     {
       mode: 'no-cors',
     }
   )
-  return await response.json()
+  if (response.status === 200) {
+    return await response.json()
+  } else {
+    return setResponseStatus(400, 'Something went wrong')
+  }
 })

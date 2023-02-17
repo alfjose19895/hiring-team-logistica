@@ -41,7 +41,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "js-yaml": "^4.1.0",
     "lint-staged": "^13.0.3",
-    "naive-ui": "^2.34.3",
     "nuxt": "3.1.1",
     "nuxt-windicss": "^2.6.0",
     "pinia": "^2.0.29",
@@ -68,6 +67,7 @@
     ]
   },
   "dependencies": {
+    "@huntersofbook/naive-ui-nuxt": "^0.6.0",
     "@nuxtjs/google-fonts": "^3.0.0-1"
   }
 }

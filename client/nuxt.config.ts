@@ -4,7 +4,7 @@ import IconsResolver from 'unplugin-icons/resolver'
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
   // server side rendering mode
-  ssr: true,
+  ssr: false,
 
   // typescripts
   typescript: {
@@ -33,6 +33,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-windicss',
     '@nuxtjs/google-fonts',
+    '@huntersofbook/naive-ui-nuxt',
   ],
 
   //@ts-ignore
@@ -56,12 +57,13 @@ export default defineNuxtConfig({
   //@ts-ignore
   auth: {
     isEnabled: true,
-    origin: 'http://localhost:3000',
+    secret: process.env.NUXT_SECRET,
+    origin: process.env.ORIGIN,
     basePath: '/api/auth',
     enableSessionRefreshPeriodically: false,
     enableSessionRefreshOnWindowFocus: true,
     enableGlobalAppMiddleware: false, // if enabled, you should be logged in to access the app
-    defaultProvider: undefined,
+    defaultProvider: 'Credentials',
     globalMiddlewareOptions: {
       allow404WithoutAuth: true,
     },
@@ -102,7 +104,7 @@ export default defineNuxtConfig({
     vueI18n: {
       locale: 'en',
       fallbackLocale: 'en',
-      availableLocales: ['en', 'id', 'ja', 'ko'],
+      availableLocales: ['en', 'es'],
     },
   },
 
@@ -112,7 +114,7 @@ export default defineNuxtConfig({
   },
 
   // windicss
-  windicss: {
+  /*windicss: {
     analyze: {
       analysis: {
         interpretUtilities: false,
@@ -123,7 +125,7 @@ export default defineNuxtConfig({
       },
     },
     scan: true,
-  },
+  },*/
 
   // content
   content: {
@@ -133,6 +135,13 @@ export default defineNuxtConfig({
     },
     highlight: {
       theme: 'github-dark',
+    },
+  },
+
+  runtimeConfig: {
+    // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config#runtimeconfig
+    public: {
+      apiBase: 'http://localhost:3000/api',
     },
   },
 })

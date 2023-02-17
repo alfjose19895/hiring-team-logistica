@@ -82,7 +82,8 @@ func ListenApplication(app *fiber.App) error {
 		log.Println("Server gracefully stopped")
 	}()
 
-	if err := app.Listen(":5000"); err != nil {
+	Url, _ := pkg.ConnectionURLBuilder("fiber")
+	if err := app.Listen(Url); err != nil {
 		log.Fatal("Error while starting the server:" + err.Error())
 	}
 

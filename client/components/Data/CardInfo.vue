@@ -9,6 +9,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  precise: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 
@@ -20,7 +24,19 @@ const props = defineProps({
       </div>
       <div class="flex flex-col font-inter leading-4">
         <span class="text-lg font-bold">
-          <NumberAnimation :from="0" :to="quantity" show-separator />
+          <NumberAnimation
+            v-if="!precise"
+            :from="0"
+            :to="quantity"
+            show-separator
+          />
+          <NumberAnimation
+            v-else
+            :precision="2"
+            :from="0"
+            :to="quantity"
+            show-separator
+          />
         </span>
         <span class="text-xs text-gray-500 uppercase font-bold">
           <slot>{{ title }}</slot>
