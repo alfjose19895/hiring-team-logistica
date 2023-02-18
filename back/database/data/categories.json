@@ -1,0 +1,44 @@
+[
+    {
+        "id" : 1,
+		"category_name" : "Bienes de consumo",
+		"status" : 1
+    },
+    {
+        "id" : 2,
+		"category_name" : "Bienes de emergencia",
+		"status" : 1
+    },
+    {
+        "id" : 3,
+		"category_name" : "Bienes de especialidad",
+		"status" : 1
+    },
+    {
+        "id" : 4,
+		"category_name" : "Bienes de uso común",
+		"status" : 1
+    },
+    {
+        "id" : 5,
+		"category_name" : "Bienes durables",
+		"status" : 1
+    },
+    {
+        "id" : 6,
+		"category_name" : "Servicios",
+		"status" : 1
+    }
+]
+
+
+
+
+
+
+
+
+
+
+
+
